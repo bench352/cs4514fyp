@@ -1,1 +1,1 @@
-# cs4514fyp
+# Smart Home Management System with Real-time Anomaly Detection on Smart Sensor with Machine Learning
