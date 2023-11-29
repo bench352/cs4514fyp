@@ -45,6 +45,6 @@ jobs:
       uses: docker/build-push-action@v3
       with:
         push: true
-        context: ${{ github.event.inputs.service_directory }}
-        file: ${{ github.event.inputs.dockerfile_path }}
-        tags: ${{ github.event.inputs.docker_image_name }}:${{ github.event.inputs.docker_image_tag }}
+        context: ${{ inputs.service_directory }}
+        file: ${{ inputs.dockerfile_path }}
+        tags: ${{ inputs.docker_image_name }}:${{ inputs.docker_image_tag }}
