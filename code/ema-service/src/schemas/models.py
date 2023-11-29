@@ -1,67 +1,68 @@
-import enum
 import uuid
 
-from sqlmodel import SQLModel, Field
+from sqlalchemy import ForeignKey, String, Enum
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+
+from schemas.enums import Role
 
 
-# Models for permission control
-
-class Scope(enum.Enum):
-    CREATE = "CREATE"
-    READ = "READ"
-    UPDATE = "UPDATE"
-    DELETE = "DELETE"
+class Base(DeclarativeBase):
+    pass
 
 
-class ResourceType(enum.Enum):
-    GROUP = "GROUP"
-    DEVICE = "DEVICE"
-    USER = "USER"
+class User(Base):
+    __tablename__ = "user"
+
+    id: Mapped[UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    username: Mapped[str] = mapped_column(String(), unique=True)
+    hashed_password: Mapped[str]
+    full_name: Mapped[str]
+    role: Mapped[Role] = mapped_column(Enum(Role))
+    flat: Mapped["Flat"] = relationship("Flat", secondary="user_flat")
 
 
-class User(SQLModel, table=True):
-    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    username: str = Field(unique=True)
-    password: str
-    full_name: str = ""
-    group_id: uuid.UUID = Field(foreign_key="group.id")
+class UserFlat(Base):
+    __tablename__ = "user_flat"
 
-
-class Group(SQLModel, table=True):
-    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    name: str = Field(unique=True)
-    description: str = ""
-
-
-class ResourceString(SQLModel, table=True):
-    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    resource_type: ResourceType
-    resource_string: str
-
-
-class Permission(SQLModel, table=True):
-    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    user_id: uuid.UUID = Field(foreign_key="user.id")
-    resource_string_id: uuid.UUID = Field(foreign_key="resource_string.id")
-    scope: Scope
+    user_id: Mapped[UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("user.id"), primary_key=True
+    )
+    flat_id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("flat.id"))
 
 
 # Models for the entities
 
-class Floor(SQLModel, table=True):
-    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    name: str = Field(unique=True)
+
+class Floor(Base):
+    __tablename__ = "floor"
+
+    id: Mapped[UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    name: Mapped[str] = mapped_column(String(), unique=True)
 
 
-class Flat(SQLModel, table=True):
-    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    name: str = Field(unique=True)
-    floor_id: uuid.UUID = Field(foreign_key="floor.id")
+class Flat(Base):
+    __tablename__ = "flat"
+
+    id: Mapped[UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    name: Mapped[str] = mapped_column(String(), unique=True)
+    floor_id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("floor.id"))
+    users: Mapped[list[User]] = relationship("User", secondary="user_flat")
 
 
-class Device(SQLModel, table=True):
-    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    name: str = Field(unique=True)
-    display_name: str = Field()
-    description: str = ""
-    flat_id: uuid.UUID = Field(foreign_key="flat.id")
+class Device(Base):
+    __tablename__ = "device"
+
+    id: Mapped[UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    name: Mapped[str] = mapped_column(String(), unique=True)
+    display_name: Mapped[str] = mapped_column(String())
+    description: Mapped[str] = mapped_column(String())
+    flat_id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("flat.id"))

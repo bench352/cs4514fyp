@@ -1,0 +1,37 @@
+{
+  "floors": {
+    "read": [
+      "LANDLORD"
+    ],
+    "write": [
+      "LANDLORD"
+    ]
+  },
+  "flats": {
+    "read": [
+      "LANDLORD",
+      "RESIDENT"
+    ],
+    "write": [
+      "LANDLORD"
+    ]
+  },
+  "devices": {
+    "read": [
+      "LANDLORD",
+      "RESIDENT"
+    ],
+    "write": [
+      "LANDLORD"
+    ]
+  },
+  "users": {
+    "read": [
+      "LANDLORD",
+      "RESIDENT"
+    ],
+    "write": [
+      "LANDLORD"
+    ]
+  }
+}
