@@ -12,11 +12,11 @@ GLOBAL_API_KEY = os.environ.get("GLOBAL_API_KEY", "<KEY>")
 
 # Server config
 PORT = int(os.environ.get("PORT", 8000))
-RELOAD = bool(os.environ.get("RELOAD", False).lower() == "true")
+RELOAD = bool(os.environ.get("RELOAD", "false").lower() == "true")
 
 # JWT config
-JWT_SECRET = os.environ.get("JWT_SECRET", "new-secret")
-JWT_EXPIRE_IN_MINUTES = int(os.environ.get("JWT_EXPIRE_IN_MINUTES", 1))
+JWT_SECRET = os.environ.get("JWT_SECRET", "secret")
+JWT_EXPIRE_IN_MINUTES = int(os.environ.get("JWT_EXPIRE_IN_MINUTES", 5))
 
 # Master admin config (used to create the first admin user)
 MASTER_ADMIN_USERNAME = os.environ.get("MASTER_ADMIN_USERNAME", "admin")

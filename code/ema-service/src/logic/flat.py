@@ -1,9 +1,11 @@
 import uuid
-from schemas import internal, rest
-from schemas.enums import Role
+
+from fastapi import HTTPException, status
+
 from repository.flat import FlatRepository
 from repository.user import UserRepository
-from fastapi import HTTPException, status
+from schemas import internal, rest
+from schemas.enums import Role
 
 flat_repository = FlatRepository()
 user_repository = UserRepository()
@@ -30,7 +32,5 @@ def read_flat(_id: str, decoded_user: internal.DecodedUserDetail) -> rest.Flat:
     else:
         user_detail = user_repository.read_by_username(decoded_user.username)
         if user_detail.flat is None or user_detail.flat.id != uuid.UUID(_id):
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN, detail="Permission denied"
-            )
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
         return flat_repository.read(_id)

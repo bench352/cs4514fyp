@@ -1,8 +1,11 @@
 import uuid
 
+from fastapi import HTTPException, status
+
 from logic.authenticate import _hash_password
 from repository.user import UserRepository
 from schemas import rest, internal
+from schemas.enums import Role
 
 user_repository = UserRepository()
 
@@ -37,16 +40,30 @@ def create_new_user(user_create: rest.UserCreate) -> rest.User:
 
 
 def list_users(
-    username: str, full_name: str, limit: int = -1, offset: int = 0
+    decoded_user: internal.DecodedUserDetail,
+    username: str,
+    full_name: str,
+    limit: int = -1,
+    offset: int = 0,
 ) -> list[rest.User]:
-    return [
-        _internal_to_rest(user)
-        for user in user_repository.list(username, full_name, limit, offset)
-    ]
+    if decoded_user.role == Role.LANDLORD:
+        return [
+            _internal_to_rest(user)
+            for user in user_repository.list(username, full_name, limit, offset)
+        ]
+    else:
+        user = user_repository.read_by_username(decoded_user.username)
+        return [_internal_to_rest(user)]
 
 
-def read_user(_id: uuid.UUID) -> rest.User:
-    return _internal_to_rest(user_repository.read(_id))
+def read_user(_id: uuid.UUID, decoded_user: internal.DecodedUserDetail) -> rest.User:
+    if decoded_user.role == Role.LANDLORD:
+        return _internal_to_rest(user_repository.read(_id))
+    else:
+        user = user_repository.read_by_username(decoded_user.username)
+        if user.id != _id:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+        return _internal_to_rest(user)
 
 
 def update_user(user_update: rest.UserUpdate) -> rest.User:
