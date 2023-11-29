@@ -1,8 +1,11 @@
 name: Build Docker Images for Microservices
-on: push
+on:
+  push:
+    branches:
+      - main
 jobs:
   build-ema-service:
-    uses: bench352/cs4514fyp/.github/workflows/reusable-docker-build.yml@backup
+    uses: bench352/cs4514fyp/.github/workflows/reusable-docker-build.yml@main
     with:
       dockerfile_path: ./code/ema-service/Dockerfile
       service_directory: ./code/ema-service
