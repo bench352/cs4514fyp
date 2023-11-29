@@ -32,9 +32,6 @@ on:
 jobs:
   build-docker-image:
     runs-on: ubuntu-22.04
-    defaults:
-      run:
-        working-directory: ${{ github.event.inputs.service_directory }}
     steps:
     - uses: actions/checkout@v3
     - name: Login to Docker Hub
