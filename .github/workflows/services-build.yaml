@@ -1,0 +1,16 @@
+name: Build Docker Images for Microservices
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build-ema-service:
+    uses: bench352/cs4514fyp/.github/workflows/reusable-docker-build.yml@main
+    with:
+      dockerfile_path: ./code/ema-service/Dockerfile
+      service_directory: ./code/ema-service
+      docker_image_name: bench352/cs4514-ema-service
+      docker_image_tag: latest
+    secrets:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
