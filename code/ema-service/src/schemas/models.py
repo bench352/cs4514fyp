@@ -1,7 +1,7 @@
 import uuid
 
-from sqlalchemy import ForeignKey, String, Enum
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import ForeignKey, String, Enum, Float
+from sqlalchemy.dialects.postgresql import UUID, TIMESTAMP
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 from schemas.enums import Role
@@ -66,3 +66,11 @@ class Device(Base):
     display_name: Mapped[str] = mapped_column(String())
     description: Mapped[str] = mapped_column(String())
     flat_id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("flat.id"))
+
+class Telemetry(Base):
+    __tablename__ = "telemetry"
+
+    device_id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("device.id"), primary_key=True)
+    timestamp: Mapped[TIMESTAMP] = mapped_column(TIMESTAMP(timezone=False), primary_key=True)
+    key: Mapped[str] = mapped_column(String(), primary_key=True)
+    value: Mapped[float] = mapped_column(Float())

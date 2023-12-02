@@ -34,5 +34,5 @@ def init_db_and_schema():
         create_database(app_db_conn_str)
     logger.info("Initializing database schema for [{}]...", env.POSTGRES_DB)
     models.Base.metadata.create_all(bind=app_db_engine)
-    logger.info("Database schema initialized for [{}], enjoy!", env.POSTGRES_DB)
+    logger.info("Schema initialized for database [{}], enjoy!", env.POSTGRES_DB)
     _create_admin_user()

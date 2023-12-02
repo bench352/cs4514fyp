@@ -14,3 +14,13 @@ jobs:
     secrets:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+  build-data-transformation-pipelines:
+    uses: bench352/cs4514fyp/.github/workflows/reusable-docker-build.yml@main
+    with:
+      dockerfile_path: ./code/data-transformation-pipelines/Dockerfile
+      service_directory: .code/data-transformation-pipelines
+      docker_image_name: bench352/cs4514-data-transformation-pipelines
+      docker_image_tag: latest
+    secrets:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
