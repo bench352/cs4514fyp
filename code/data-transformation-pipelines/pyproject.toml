@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "data-transformation-pipelines"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+aiomqtt = "^1.2.1"
+pydantic = "^2.5.2"
+pydantic-settings = "^2.1.0"
+loguru = "^0.7.2"
+aiokafka = "^0.8.1"
+pendulum = "^2.1.2"
+psycopg = { extras = ["binary"], version = "^3.1.13" }
+psycopg-pool = "^3.2.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
