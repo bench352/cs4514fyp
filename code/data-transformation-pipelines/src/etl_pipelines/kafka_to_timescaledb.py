@@ -75,7 +75,9 @@ class KafkaToTimescaleDBPipeline(BaseETLPipeline[str, str]):
                     await conn.commit()
                 except UniqueViolation:
                     await conn.rollback()
-                    logger.warning("Duplicated entry, it will not be stored: {}", transformed)
+                    logger.warning(
+                        "Duplicated entry, it will not be stored: {}", transformed
+                    )
                 except DatabaseError as e:
                     logger.error("The database failed: {}", e)
 

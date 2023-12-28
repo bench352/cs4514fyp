@@ -67,10 +67,15 @@ class Device(Base):
     description: Mapped[str] = mapped_column(String())
     flat_id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("flat.id"))
 
+
 class Telemetry(Base):
     __tablename__ = "telemetry"
 
-    device_id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("device.id"), primary_key=True)
-    timestamp: Mapped[TIMESTAMP] = mapped_column(TIMESTAMP(timezone=False), primary_key=True)
+    device_id: Mapped[UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("device.id"), primary_key=True
+    )
+    timestamp: Mapped[TIMESTAMP] = mapped_column(
+        TIMESTAMP(timezone=False), primary_key=True
+    )
     key: Mapped[str] = mapped_column(String(), primary_key=True)
     value: Mapped[float] = mapped_column(Float())
