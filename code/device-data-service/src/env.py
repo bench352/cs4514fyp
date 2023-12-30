@@ -16,7 +16,6 @@ class TimescaleDBConfig(BaseSettings):
 
 class AuthConfig(BaseSettings):
     jwt_secret: str
-    jwt_expire_in_minutes: int
 
 
 class EMAServiceConfig(BaseSettings):

@@ -21,7 +21,7 @@ def list_devices(
     else:
         user_detail = user_repo.read_by_username(decoded_user.username)
         if user_detail.flat is None:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+            return []
         return device_repo.list(name, user_detail.flat.id, limit, offset)
 
 

@@ -2,9 +2,9 @@ import uuid
 from typing import Annotated
 
 import jwt
-from cachetools import TTLCache, cached
+from async_lru import alru_cache
 from fastapi import HTTPException, status, Depends, WebSocketException
-from fastapi.security import HTTPBearer
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 from env import AuthConfig
 from repository.ema_service import EMAServiceClient
@@ -38,34 +38,39 @@ def authenticate_user(token: str) -> internal.DecodedUserDetail:
         )
 
 
-class RestAuthorizationClient:
-    async def __call__(
-        self, _id: uuid.UUID, token: Annotated[str, Depends(oauth2_scheme)]
-    ):
-        authenticate_user(token)
-        devices_granted_to_user = await self._get_device_ids_granted_to_user(token)
-        if str(_id) not in devices_granted_to_user:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"Device with ID [{_id}] not found",
-            )
-
-    @cached(cache=TTLCache(maxsize=1024, ttl=60))
+class BaseAuthorizationClient:
+    @alru_cache(maxsize=10240, ttl=60)
     async def _get_device_ids_granted_to_user(self, token: str) -> set[str]:
         return await ema_service_client.list_device_ids(token)
 
 
-class WebsocketAuthorizationClient:
-    async def __call__(self, token: str, _id: uuid.UUID):
-        authenticate_user(token)
-        device_granted_to_user = await _get_device_ids_granted_to_user(token)
-        if str(_id) not in device_granted_to_user:
-            raise WebSocketException(
-                code=status.WS_1008_POLICY_VIOLATION,
-                reason=f"Device with ID [{_id}] not found",
+class RestAuthorizationClient(BaseAuthorizationClient):
+    async def __call__(
+        self,
+        device_id: uuid.UUID,
+        token: Annotated[HTTPAuthorizationCredentials, Depends(oauth2_scheme)],
+    ):
+        authenticate_user(token.credentials)
+        devices_granted_to_user = await self._get_device_ids_granted_to_user(
+            token.credentials
+        )
+        if str(device_id) not in devices_granted_to_user:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Device with ID [{device_id}] not found",
             )
 
+    @alru_cache(maxsize=10240, ttl=60)
+    async def _get_device_ids_granted_to_user(self, token: str) -> set[str]:
+        return await ema_service_client.list_device_ids(token)
 
-@cached(cache=TTLCache(maxsize=1024, ttl=60))
-async def _get_device_ids_granted_to_user(self, token: str) -> set[str]:
-    return await ema_service_client.list_device_ids(token)
+
+class WebsocketAuthorizationClient(BaseAuthorizationClient):
+    async def __call__(self, token: str, device_id: uuid.UUID):
+        authenticate_user(token)
+        device_granted_to_user = await self._get_device_ids_granted_to_user(token)
+        if str(device_id) not in device_granted_to_user:
+            raise WebSocketException(
+                code=status.WS_1008_POLICY_VIOLATION,
+                reason=f"Device with ID [{device_id}] not found",
+            )
