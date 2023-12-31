@@ -34,3 +34,13 @@ jobs:
     secrets:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+  build-iot-device-simulator:
+    uses: bench352/cs4514fyp/.github/workflows/reusable-docker-build.yml@main
+    with:
+      dockerfile_path: ./code/iot-device-simulator/Dockerfile
+      service_directory: ./code/iot-device-simulator
+      docker_image_name: bench352/cs4514-iot-device-simulator:latest
+      docker_image_tag: latest
+    secrets:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
