@@ -39,7 +39,7 @@ jobs:
     with:
       dockerfile_path: ./code/iot-device-simulator/Dockerfile
       service_directory: ./code/iot-device-simulator
-      docker_image_name: bench352/cs4514-iot-device-simulator:latest
+      docker_image_name: bench352/cs4514-iot-device-simulator
       docker_image_tag: latest
     secrets:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
