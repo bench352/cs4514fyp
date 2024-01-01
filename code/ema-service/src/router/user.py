@@ -3,10 +3,10 @@ from typing import Annotated
 
 from fastapi import APIRouter, Path, Query, status, Depends
 from fastapi.responses import Response
-
 from logic import user
 from logic.authorize import AuthorizationClient
 from repository.user import UserRepository
+
 from schemas import rest, internal
 
 router = APIRouter(prefix="/users", tags=["Users"])

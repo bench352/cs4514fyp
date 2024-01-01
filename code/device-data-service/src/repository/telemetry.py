@@ -5,9 +5,9 @@ from datetime import datetime
 from fastapi.exceptions import HTTPException
 from loguru import logger
 from psycopg_pool import AsyncConnectionPool
+from schemas.telemetry import TelemetryDataPoint, TelemetryData, TelemetryKeyValues
 
 from env import TimescaleDBConfig
-from schemas.telemetry import TelemetryDataPoint, TelemetryData, TelemetryKeyValues
 
 
 class TelemetryRepository:

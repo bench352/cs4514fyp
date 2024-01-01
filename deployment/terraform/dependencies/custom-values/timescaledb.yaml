@@ -1,0 +1,3 @@
+postInit:
+  - secret:
+      name: timescale-post-init-pw

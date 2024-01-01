@@ -2,7 +2,6 @@ import uuid
 from typing import Optional
 
 from pydantic import BaseModel, Field
-
 from schemas.enums import Role, TokenType
 
 

@@ -1,10 +1,10 @@
 import uuid
 
 from fastapi import HTTPException, status
+from repository.connection import get_session
 from sqlalchemy import select, delete
 from sqlalchemy.exc import IntegrityError, NoResultFound
 
-from repository.connection import get_session
 from schemas import internal, models, rest
 
 

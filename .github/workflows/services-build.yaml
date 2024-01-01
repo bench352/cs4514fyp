@@ -12,8 +12,8 @@ jobs:
       docker_image_name: bench352/cs4514-ema-service
       docker_image_tag: latest
     secrets:
-        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
   build-data-transformation-pipelines:
     uses: bench352/cs4514fyp/.github/workflows/reusable-docker-build.yml@main
     with:
@@ -22,8 +22,8 @@ jobs:
       docker_image_name: bench352/cs4514-data-transformation-pipelines
       docker_image_tag: latest
     secrets:
-        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
   build-device-data-service:
     uses: bench352/cs4514fyp/.github/workflows/reusable-docker-build.yml@main
     with:

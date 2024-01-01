@@ -1,13 +1,13 @@
 import uuid
 from typing import Annotated
 
+import logic.flat
+import repository.flat as flat_repo
 from fastapi import APIRouter, Path, Query, status, Depends
 from fastapi.responses import Response
-import logic.flat
 from logic.authorize import AuthorizationClient
-from schemas import internal, rest
 
-import repository.flat as flat_repo
+from schemas import internal, rest
 
 router = APIRouter(prefix="/flats", tags=["Flats"])
 flat_repo = flat_repo.FlatRepository()

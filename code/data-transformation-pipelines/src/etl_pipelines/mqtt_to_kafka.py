@@ -78,6 +78,10 @@ class MQTTToKafkaPipeline(BaseETLPipeline[str, kafka.KafkaMessageForTelemetry]):
         self._kafka_producer = AIOKafkaProducer(
             bootstrap_servers=f"{self._config.kafka_host}:{self._config.kafka_port}",
             client_id=self._config.kafka_client_id,
+            security_protocol="SASL_PLAINTEXT",
+            sasl_mechanism="PLAIN",
+            sasl_plain_username=self._config.kafka_username,
+            sasl_plain_password=self._config.kafka_password,
         )
         await self._kafka_producer.start()
         logger.info("Connected to Kafka Broker [{}]", self._config.kafka_host)

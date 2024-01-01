@@ -2,14 +2,13 @@ import uuid
 
 from fastapi import APIRouter, Path, WebSocket, WebSocketDisconnect, Depends, status
 from fastapi.exceptions import HTTPException, WebSocketException
-from loguru import logger
-
 from logic.authorize import (
     authenticate_user,
     WebsocketAuthorizationClient,
     RestAuthorizationClient,
 )
 from logic.sub_manager import SubscriptionManager
+from loguru import logger
 from repository.ema_service import EMAServiceClient
 from repository.telemetry import TelemetryRepository
 from schemas.telemetry import TelemetryData

@@ -9,5 +9,5 @@ services:
       - timescaledb_data:/var/lib/postgresql/data
     restart: always
 volumes:
-    timescaledb_data:
-      driver: local
+  timescaledb_data:
+    driver: local

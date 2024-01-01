@@ -1,8 +1,8 @@
+import repository.floor as floor_repo
 from fastapi import APIRouter, Path, Query, status, Depends
 from fastapi.responses import Response
-
-import repository.floor as floor_repo
 from logic import authorize
+
 from schemas import rest
 
 router = APIRouter(prefix="/floors", tags=["Floors"])

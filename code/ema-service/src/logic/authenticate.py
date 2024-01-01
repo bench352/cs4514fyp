@@ -5,9 +5,9 @@ import jwt
 import pendulum
 from fastapi import HTTPException, status, Depends
 from fastapi.security import OAuth2PasswordBearer
+from repository.user import UserRepository
 
 import env
-from repository.user import UserRepository
 from schemas import rest, internal, enums
 
 user_repo = UserRepository()

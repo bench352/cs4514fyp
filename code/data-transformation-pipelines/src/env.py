@@ -10,6 +10,8 @@ class MQTTToKafkaSettings(BaseSettings):
 
     kafka_host: str
     kafka_port: int
+    kafka_username: str
+    kafka_password: str
     kafka_topic: str
     kafka_client_id: str
 
@@ -17,6 +19,8 @@ class MQTTToKafkaSettings(BaseSettings):
 class KafkaToTimescaleDBSettings(BaseSettings):
     kafka_host: str
     kafka_port: int
+    kafka_username: str
+    kafka_password: str
     kafka_topic: str
     consumer_group: str
 

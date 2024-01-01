@@ -2,11 +2,11 @@ import uuid
 
 import orjson
 from aiokafka import AIOKafkaConsumer
+from logic.sub_manager import SubscriptionManager
 from loguru import logger
+from schemas.telemetry import TelemetryData, TelemetryKeyValues, TelemetryDataPoint
 
 from env import KafkaConfig
-from logic.sub_manager import SubscriptionManager
-from schemas.telemetry import TelemetryData, TelemetryKeyValues, TelemetryDataPoint
 
 sub_manager = SubscriptionManager.get_instance()
 kafka_config = KafkaConfig()
@@ -37,6 +37,10 @@ async def fetch_data_in_background():
         kafka_config.kafka_topic,
         bootstrap_servers=f"{kafka_config.kafka_host}:{kafka_config.kafka_port}",
         group_id=kafka_config.kafka_client_id,
+        security_protocol="SASL_PLAINTEXT",
+        sasl_mechanism="PLAIN",
+        sasl_plain_username=kafka_config.kafka_username,
+        sasl_plain_password=kafka_config.kafka_password,
     )
     await consumer.start()
     logger.info(

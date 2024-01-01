@@ -1,0 +1,1 @@
+# Deploy Smart Home Management System to Kubernetes Cluster with Terraform
