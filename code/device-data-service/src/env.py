@@ -4,6 +4,7 @@ from pydantic_settings import BaseSettings
 class ServerConfig(BaseSettings):
     port: int = 8000
     reload: bool = False
+    path_prefix: str = ""
 
 
 class TimescaleDBConfig(BaseSettings):

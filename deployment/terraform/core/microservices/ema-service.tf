@@ -1,5 +1,5 @@
 resource "helm_release" "ema_service" {
-  chart     = "${path.module}/../../helm/ema-service"
+  chart     = "${path.module}/../../../helm/ema-service"
   name      = "ema-service"
   namespace = kubernetes_namespace.shms_microservices.metadata[0].name
 
@@ -56,5 +56,10 @@ resource "helm_release" "ema_service" {
   set {
     name  = "env.MASTER_ADMIN_PASSWORD"
     value = var.master_admin_password
+  }
+
+  set {
+    name  = "env.PATH_PREFIX"
+    value = "/ema"
   }
 }

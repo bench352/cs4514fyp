@@ -3,6 +3,8 @@ resource "helm_release" "kafka" {
   name      = "kafka"
   namespace = kubernetes_namespace.shms_dependencies.metadata[0].name
 
+  timeout = 600  # 10 minutes
+
   version = "26.6.2"
 
   set {

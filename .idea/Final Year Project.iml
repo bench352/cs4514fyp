@@ -4,8 +4,9 @@
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/code/data-transformation-pipelines/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/code/iot-device-simulator/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/code/ema-service/src" isTestSource="false" />
     </content>
-    <orderEntry type="jdk" jdkName="DT Pipeline" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="EMA Service" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>

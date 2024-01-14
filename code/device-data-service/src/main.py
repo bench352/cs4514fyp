@@ -11,7 +11,7 @@ from repository.telemetry import TelemetryRepository
 from router import historical, real_time
 
 background_task: asyncio.Task | None = None
-
+server_config = ServerConfig()
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
@@ -27,6 +27,7 @@ serve **device-related data** from the database via REST APIs, including the lat
 IoT sensors. It also provides a WebSocket endpoint to provide real-time sensor data subscription to clients.
 """,
     lifespan=lifespan,
+    root_path=server_config.path_prefix,
 )
 
 app.include_router(historical.router)
@@ -52,7 +53,6 @@ async def health():
 
 
 if __name__ == "__main__":
-    server_config = ServerConfig()
     uvicorn.run(
         "main:app", host="0.0.0.0", port=server_config.port, reload=server_config.reload
     )

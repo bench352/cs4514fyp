@@ -1,0 +1,17 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: device-data-service-ingressroute
+  namespace: shms-microservices
+spec:
+  entryPoints:
+    - web
+  routes:
+    - kind: Rule
+      match: PathPrefix(`/data`)
+      services:
+        - name: device-data-service
+          port: 8000
+          namespace: shms-microservices
+      middlewares:
+        - name: device-data-service-stripprefix

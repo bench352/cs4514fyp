@@ -14,6 +14,8 @@ GLOBAL_API_KEY = os.environ.get("GLOBAL_API_KEY", "<KEY>")
 PORT = int(os.environ.get("PORT", 8000))
 RELOAD = bool(os.environ.get("RELOAD", "false").lower() == "true")
 
+PATH_PREFIX = os.environ.get("PATH_PREFIX", "")
+
 # JWT config
 JWT_SECRET = os.environ.get("JWT_SECRET", "secret")
 JWT_EXPIRE_IN_MINUTES = int(os.environ.get("JWT_EXPIRE_IN_MINUTES", 5))

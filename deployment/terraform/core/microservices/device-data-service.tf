@@ -1,5 +1,5 @@
 resource "helm_release" "device_data_service" {
-  chart     = "${path.module}/../../helm/device-data-service"
+  chart     = "${path.module}/../../../helm/device-data-service"
   name      = "device-data-service"
   namespace = kubernetes_namespace.shms_microservices.metadata[0].name
 
@@ -36,6 +36,11 @@ resource "helm_release" "device_data_service" {
   set {
     name  = "env.RELOAD"
     value = false
+  }
+
+  set {
+    name  = "env.PATH_PREFIX"
+    value = "/data"
   }
 
   set {

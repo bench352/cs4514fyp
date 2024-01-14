@@ -3,5 +3,5 @@
   <component name="Black">
     <option name="sdkName" value="EMA Service" />
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="DT Pipeline" project-jdk-type="Python SDK" />
+  <component name="ProjectRootManager" version="2" project-jdk-name="EMA Service" project-jdk-type="Python SDK" />
 </project>

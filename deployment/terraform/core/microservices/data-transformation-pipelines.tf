@@ -1,5 +1,5 @@
 resource "helm_release" "data_transformation_pipelines" {
-  chart     = "${path.module}/../../helm/data-transformation-pipelines"
+  chart     = "${path.module}/../../../helm/data-transformation-pipelines"
   name      = "data-transformation-pipelines"
   namespace = kubernetes_namespace.shms_microservices.metadata[0].name
 
