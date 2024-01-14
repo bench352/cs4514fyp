@@ -27,6 +27,7 @@ to rooms and users. It also manages credentials for all users in the system and 
 up the permission of a given user for authorisation. 
 """,
     lifespan=lifespan,
+    root_path=env.PATH_PREFIX,
 )
 app.include_router(router.floor.router)
 app.include_router(router.flat.router)

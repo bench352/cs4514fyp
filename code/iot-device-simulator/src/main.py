@@ -1,8 +1,9 @@
-import json
-import asyncio
 import argparse
-import aiomqtt
+import asyncio
+import json
 from datetime import datetime
+
+import aiomqtt
 from loguru import logger
 
 parser = argparse.ArgumentParser(description="IoT Device Simulator")

@@ -3,8 +3,8 @@ from functools import cache
 from typing import Annotated
 
 from fastapi import Depends, status, HTTPException
-
 from logic import authenticate
+
 from schemas import internal
 
 

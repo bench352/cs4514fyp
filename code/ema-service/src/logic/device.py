@@ -1,9 +1,11 @@
-from schemas import internal, rest
-from schemas.enums import Role
 import uuid
+
+from fastapi import HTTPException, status
 from repository.device import DeviceRepository
 from repository.user import UserRepository
-from fastapi import HTTPException, status
+from schemas.enums import Role
+
+from schemas import internal, rest
 
 device_repo = DeviceRepository()
 user_repo = UserRepository()

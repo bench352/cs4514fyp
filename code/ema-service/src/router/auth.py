@@ -3,8 +3,8 @@ from typing import Annotated
 from fastapi import APIRouter, Depends
 from fastapi.responses import Response
 from fastapi.security import OAuth2PasswordRequestForm
-
 from logic import authenticate
+
 from schemas import rest, internal
 
 router = APIRouter(prefix="/auth", tags=["authenticate"])

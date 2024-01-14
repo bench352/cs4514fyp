@@ -4,6 +4,7 @@ from pydantic_settings import BaseSettings
 class ServerConfig(BaseSettings):
     port: int = 8000
     reload: bool = False
+    path_prefix: str = ""
 
 
 class TimescaleDBConfig(BaseSettings):
@@ -25,5 +26,7 @@ class EMAServiceConfig(BaseSettings):
 class KafkaConfig(BaseSettings):
     kafka_host: str
     kafka_port: int
+    kafka_username: str
+    kafka_password: str
     kafka_topic: str
     kafka_client_id: str

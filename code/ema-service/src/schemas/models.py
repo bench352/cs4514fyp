@@ -1,10 +1,9 @@
 import uuid
 
+from schemas.enums import Role
 from sqlalchemy import ForeignKey, String, Enum, Float
 from sqlalchemy.dialects.postgresql import UUID, TIMESTAMP
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
-
-from schemas.enums import Role
 
 
 class Base(DeclarativeBase):
@@ -21,7 +20,9 @@ class User(Base):
     hashed_password: Mapped[str]
     full_name: Mapped[str]
     role: Mapped[Role] = mapped_column(Enum(Role))
-    flat: Mapped["Flat"] = relationship("Flat", secondary="user_flat", back_populates="users")
+    flat: Mapped["Flat"] = relationship(
+        "Flat", secondary="user_flat", back_populates="users"
+    )
 
 
 class UserFlat(Base):
@@ -53,7 +54,9 @@ class Flat(Base):
     )
     name: Mapped[str] = mapped_column(String(), unique=True)
     floor_id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("floor.id"))
-    users: Mapped[list[User]] = relationship("User", secondary="user_flat", back_populates="flat")
+    users: Mapped[list[User]] = relationship(
+        "User", secondary="user_flat", back_populates="flat"
+    )
 
 
 class Device(Base):

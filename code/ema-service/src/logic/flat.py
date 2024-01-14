@@ -1,11 +1,11 @@
 import uuid
 
 from fastapi import HTTPException, status
-
 from repository.flat import FlatRepository
 from repository.user import UserRepository
-from schemas import internal, rest
 from schemas.enums import Role
+
+from schemas import internal, rest
 
 flat_repository = FlatRepository()
 user_repository = UserRepository()

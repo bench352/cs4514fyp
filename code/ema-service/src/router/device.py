@@ -1,12 +1,12 @@
 import uuid
 from typing import Annotated
 
+import logic.device
 from fastapi import APIRouter, Path, Query, status, Depends
 from fastapi.responses import Response
-
-import logic.device
 from logic.authorize import AuthorizationClient
 from repository.device import DeviceRepository
+
 from schemas import rest, internal
 
 router = APIRouter(prefix="/devices", tags=["Devices"])
