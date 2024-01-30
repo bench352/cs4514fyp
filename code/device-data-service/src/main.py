@@ -13,6 +13,7 @@ from router import historical, real_time
 background_task: asyncio.Task | None = None
 server_config = ServerConfig()
 
+
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     await TelemetryRepository.init_connection_pool()

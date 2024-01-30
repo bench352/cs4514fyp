@@ -6,7 +6,7 @@
       <sourceFolder url="file://$MODULE_DIR$/code/iot-device-simulator/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/code/ema-service/src" isTestSource="false" />
     </content>
-    <orderEntry type="jdk" jdkName="EMA Service" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.10.12 WSL (Ubuntu)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>
