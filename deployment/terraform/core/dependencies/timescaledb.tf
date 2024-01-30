@@ -12,7 +12,17 @@ resource "helm_release" "timescaledb" {
 
   set {
     name  = "replicaCount"
-    value = 1
+    value = 3
+  }
+
+  set {
+    name = "service.primary.type"
+    value = "NodePort"
+  }
+
+  set {
+    name = "service.primary.nodePort"
+    value = 30432
   }
 
   depends_on = [
