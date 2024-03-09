@@ -1,10 +1,9 @@
 import uuid
 
-from sqlalchemy import ForeignKey, String, Enum, Float
-from sqlalchemy.dialects.postgresql import UUID, TIMESTAMP, BOOLEAN
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
-
 from schemas.enums import Role
+from sqlalchemy import Enum, Float, ForeignKey, String
+from sqlalchemy.dialects.postgresql import BOOLEAN, TIMESTAMP, UUID
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 
 class Base(DeclarativeBase):

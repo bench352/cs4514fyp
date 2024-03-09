@@ -3,9 +3,8 @@ import uuid
 from fastapi import HTTPException, status
 from logic.authenticate import _hash_password
 from repository.user import UserRepository
+from schemas import internal, rest
 from schemas.enums import Role
-
-from schemas import rest, internal
 
 user_repository = UserRepository()
 

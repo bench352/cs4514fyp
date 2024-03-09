@@ -2,11 +2,10 @@ import uuid
 
 import orjson
 from aiokafka import AIOKafkaConsumer
+from env import KafkaConfig
 from logic.sub_manager import SubscriptionManager
 from loguru import logger
-from schemas.telemetry import TelemetryData, TelemetryKeyValues, TelemetryDataPoint
-
-from env import KafkaConfig
+from schemas.telemetry import TelemetryData, TelemetryDataPoint, TelemetryKeyValues
 
 sub_manager = SubscriptionManager.get_instance()
 kafka_config = KafkaConfig()

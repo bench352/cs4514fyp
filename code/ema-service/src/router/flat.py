@@ -3,10 +3,9 @@ from typing import Annotated
 
 import logic.flat
 import repository.flat as flat_repo
-from fastapi import APIRouter, Path, Query, status, Depends
+from fastapi import APIRouter, Depends, Path, Query, status
 from fastapi.responses import Response
 from logic.authorize import AuthorizationClient
-
 from schemas import internal, rest
 
 router = APIRouter(prefix="/flats", tags=["Flats"])

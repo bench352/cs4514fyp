@@ -1,7 +1,6 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, Session
-
 import env
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session, sessionmaker
 
 app_db_conn_str = f"postgresql+psycopg2://{env.POSTGRES_USER}:{env.POSTGRES_PASSWORD}@{env.POSTGRES_HOST}/{env.POSTGRES_DB}"
 

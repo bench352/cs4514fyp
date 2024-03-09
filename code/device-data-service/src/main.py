@@ -2,11 +2,10 @@ import asyncio
 from contextlib import asynccontextmanager
 
 import uvicorn
-from fastapi import FastAPI, HTTPException
-from loguru import logger
-
 from env import ServerConfig
+from fastapi import FastAPI, HTTPException
 from logic import rt_data_fetching
+from loguru import logger
 from repository.telemetry import TelemetryRepository
 from router import historical, real_time
 

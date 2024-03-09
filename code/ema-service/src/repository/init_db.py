@@ -1,12 +1,11 @@
+import env
 import fastapi
 from logic import user
 from loguru import logger
 from repository.connection import app_db_conn_str, app_db_engine
 from repository.user import UserRepository
+from schemas import enums, models, rest
 from sqlalchemy_utils import create_database, database_exists
-
-import env
-from schemas import models, rest, enums
 
 user_repo = UserRepository()
 

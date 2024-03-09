@@ -44,3 +44,23 @@ jobs:
     secrets:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+  build-ad-pipeline:
+    uses: bench352/cs4514fyp/.github/workflows/reusable-docker-build.yml@main
+    with:
+      dockerfile_path: ./code/device-healthiness-monitoring-service/ad-pipeline/Dockerfile
+      service_directory: ./code/device-healthiness-monitoring-service/ad-pipeline
+      docker_image_name: bench352/cs4514-ad-pipeline
+      docker_image_tag: latest
+    secrets:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+  build-device-healthiness-monitoring-service:
+    uses: bench352/cs4514fyp/.github/workflows/reusable-docker-build.yml@main
+    with:
+      dockerfile_path: ./code/device-healthiness-monitoring-service/web-server/Dockerfile
+      service_directory: ./code/device-healthiness-monitoring-service/web-server
+      docker_image_name: bench352/cs4514-device-healthiness-monitoring-service
+      docker_image_tag: latest
+    secrets:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
