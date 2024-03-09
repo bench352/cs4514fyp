@@ -4,13 +4,12 @@ from typing import AsyncIterable
 
 import pendulum
 from aiokafka import AIOKafkaConsumer
-from loguru import logger
-from psycopg.errors import UniqueViolation, DatabaseError
-from psycopg_pool import AsyncConnectionPool
-from pydantic import ValidationError
-
 from env import KafkaToTimescaleDBSettings
 from etl_pipelines.base import BaseETLPipeline
+from loguru import logger
+from psycopg.errors import DatabaseError, UniqueViolation
+from psycopg_pool import AsyncConnectionPool
+from pydantic import ValidationError
 from schemas import kafka, timescaledb
 
 
@@ -21,15 +20,21 @@ class KafkaToTimescaleDBPipeline(BaseETLPipeline[str, str]):
         self._config = KafkaToTimescaleDBSettings()
 
     async def extract(self) -> AsyncIterable[str]:
-        kafka_consumer = AIOKafkaConsumer(
-            self._config.kafka_topic,
-            bootstrap_servers=f"{self._config.kafka_host}:{self._config.kafka_port}",
-            group_id=self._config.consumer_group,
-            security_protocol="SASL_PLAINTEXT",
-            sasl_mechanism="PLAIN",
-            sasl_plain_username=self._config.kafka_username,
-            sasl_plain_password=self._config.kafka_password,
-        )
+        consumer_args = {
+            "bootstrap_servers": f"{self._config.kafka_host}:{self._config.kafka_port}",
+            "group_id": self._config.consumer_group,
+        }
+        if self._config.kafka_auth_enabled:
+            consumer_args.update(
+                {
+                    "security_protocol": "SASL_PLAINTEXT",
+                    "sasl_mechanism": "PLAIN",
+                    "sasl_plain_username": self._config.kafka_username,
+                    "sasl_plain_password": self._config.kafka_password,
+                }
+            )
+
+        kafka_consumer = AIOKafkaConsumer(self._config.kafka_topic, **consumer_args)
         await kafka_consumer.start()
         logger.info("Connected to Kafka Broker [{}]", self._config.kafka_host)
         try:

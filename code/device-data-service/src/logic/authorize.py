@@ -3,11 +3,10 @@ from typing import Annotated
 
 import jwt
 from async_lru import alru_cache
-from fastapi import HTTPException, status, Depends, WebSocketException
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from repository.ema_service import EMAServiceClient
-
 from env import AuthConfig
+from fastapi import Depends, HTTPException, WebSocketException, status
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from repository.ema_service import EMAServiceClient
 from schemas import internal
 
 oauth2_scheme = HTTPBearer()

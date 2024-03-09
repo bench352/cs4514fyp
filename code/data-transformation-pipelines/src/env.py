@@ -14,6 +14,7 @@ class MQTTToKafkaSettings(BaseSettings):
     kafka_password: str
     kafka_topic: str
     kafka_client_id: str
+    kafka_auth_enabled: bool = True
 
 
 class KafkaToTimescaleDBSettings(BaseSettings):
@@ -23,6 +24,7 @@ class KafkaToTimescaleDBSettings(BaseSettings):
     kafka_password: str
     kafka_topic: str
     consumer_group: str
+    kafka_auth_enabled: bool = True
 
     timescaledb_host: str
     timescaledb_port: int

@@ -25,7 +25,7 @@
       </ENTRIES>
     </EXTENSION>
     <option name="SCRIPT_NAME" value="$PROJECT_DIR$/code/iot-device-simulator/src/main.py" />
-    <option name="PARAMETERS" value="--schedule ../datasets/schedule.json --device-id 0059dece-c3c4-4998-94c9-94f66e632afd --mqtt-host localhost --mqtt-port 31883 --mqtt-username admin --mqtt-password password --mqtt-topic realtime-telemetry-data rt" />
+    <option name="PARAMETERS" value="--schedule ../datasets/schedule.json --device-id bc891583-a34d-4142-9df0-b0f1ccfa8a1b --mqtt-host localhost --mqtt-port 1883 --mqtt-username admin --mqtt-password password --mqtt-topic rt-telemetry-data rt" />
     <option name="SHOW_COMMAND_LINE" value="false" />
     <option name="EMULATE_TERMINAL" value="false" />
     <option name="MODULE_MODE" value="false" />

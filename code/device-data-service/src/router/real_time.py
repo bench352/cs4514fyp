@@ -1,11 +1,11 @@
 import uuid
 
-from fastapi import APIRouter, Path, WebSocket, WebSocketDisconnect, Depends, status
+from fastapi import APIRouter, Depends, Path, WebSocket, WebSocketDisconnect, status
 from fastapi.exceptions import HTTPException, WebSocketException
 from logic.authorize import (
-    authenticate_user,
-    WebsocketAuthorizationClient,
     RestAuthorizationClient,
+    WebsocketAuthorizationClient,
+    authenticate_user,
 )
 from logic.sub_manager import SubscriptionManager
 from loguru import logger

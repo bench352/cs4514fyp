@@ -5,8 +5,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-from etl_pipelines.mqtt_to_kafka import MQTTToKafkaPipeline
 from etl_pipelines.kafka_to_timescaledb import KafkaToTimescaleDBPipeline
+from etl_pipelines.mqtt_to_kafka import MQTTToKafkaPipeline
 
 parser = argparse.ArgumentParser(description="Run ETL pipeline")
 

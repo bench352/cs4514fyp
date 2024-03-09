@@ -1,14 +1,9 @@
 from contextlib import asynccontextmanager
 
+import env
+import router.user
 import uvicorn
 from fastapi import FastAPI
-
-import env
-import router.auth
-import router.device
-import router.flat
-import router.floor
-import router.user
 from repository import init_db
 
 

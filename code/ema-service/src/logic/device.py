@@ -3,9 +3,8 @@ import uuid
 from fastapi import HTTPException, status
 from repository.device import DeviceRepository
 from repository.user import UserRepository
-from schemas.enums import Role
-
 from schemas import internal, rest
+from schemas.enums import Role
 
 device_repo = DeviceRepository()
 user_repo = UserRepository()

@@ -1,5 +1,5 @@
 import abc
-from typing import TypeVar, Generic, AsyncIterable
+from typing import AsyncIterable, Generic, TypeVar
 
 ExtractedT = TypeVar("ExtractedT")
 TransformedT = TypeVar("TransformedT")

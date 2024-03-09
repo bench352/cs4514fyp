@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
 
-from fastapi import APIRouter, Path, Query, Depends
+from fastapi import APIRouter, Depends, Path, Query
 from logic.authorize import RestAuthorizationClient
 from repository.telemetry import TelemetryRepository
 from schemas.telemetry import TelemetryData

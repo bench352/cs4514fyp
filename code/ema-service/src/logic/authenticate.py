@@ -1,14 +1,13 @@
 from typing import Annotated
 
 import bcrypt
+import env
 import jwt
 import pendulum
-from fastapi import HTTPException, status, Depends
+from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from repository.user import UserRepository
-
-import env
-from schemas import rest, internal, enums
+from schemas import enums, internal, rest
 
 user_repo = UserRepository()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")

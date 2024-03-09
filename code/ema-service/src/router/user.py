@@ -1,13 +1,12 @@
 import uuid
 from typing import Annotated
 
-from fastapi import APIRouter, Path, Query, status, Depends
+from fastapi import APIRouter, Depends, Path, Query, status
 from fastapi.responses import Response
 from logic import user
 from logic.authorize import AuthorizationClient
 from repository.user import UserRepository
-
-from schemas import rest, internal
+from schemas import internal, rest
 
 router = APIRouter(prefix="/users", tags=["Users"])
 user_repo = UserRepository()

@@ -2,7 +2,7 @@ import schemas.models as models
 import schemas.rest as rest
 from fastapi import HTTPException, status
 from repository.connection import get_session
-from sqlalchemy import select, delete
+from sqlalchemy import delete, select
 from sqlalchemy.exc import IntegrityError, NoResultFound
 
 

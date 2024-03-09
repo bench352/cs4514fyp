@@ -16,12 +16,12 @@ resource "helm_release" "timescaledb" {
   }
 
   set {
-    name = "service.primary.type"
+    name  = "service.primary.type"
     value = "NodePort"
   }
 
   set {
-    name = "service.primary.nodePort"
+    name  = "service.primary.nodePort"
     value = 30432
   }
 

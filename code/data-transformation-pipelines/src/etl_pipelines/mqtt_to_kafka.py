@@ -5,11 +5,10 @@ from typing import AsyncIterable
 import aiomqtt
 import pendulum
 from aiokafka import AIOKafkaProducer
-from loguru import logger
-from pydantic import ValidationError
-
 from env import MQTTToKafkaSettings
 from etl_pipelines.base import BaseETLPipeline
+from loguru import logger
+from pydantic import ValidationError
 from schemas import kafka
 
 
@@ -75,14 +74,20 @@ class MQTTToKafkaPipeline(BaseETLPipeline[str, kafka.KafkaMessageForTelemetry]):
         )
 
     async def run(self) -> None:
-        self._kafka_producer = AIOKafkaProducer(
-            bootstrap_servers=f"{self._config.kafka_host}:{self._config.kafka_port}",
-            client_id=self._config.kafka_client_id,
-            security_protocol="SASL_PLAINTEXT",
-            sasl_mechanism="PLAIN",
-            sasl_plain_username=self._config.kafka_username,
-            sasl_plain_password=self._config.kafka_password,
-        )
+        producer_args = {
+            "bootstrap_servers": f"{self._config.kafka_host}:{self._config.kafka_port}",
+            "client_id": self._config.kafka_client_id,
+        }
+        if self._config.kafka_auth_enabled:
+            producer_args.update(
+                {
+                    "security_protocol": "SASL_PLAINTEXT",
+                    "sasl_mechanism": "PLAIN",
+                    "sasl_plain_username": self._config.kafka_username,
+                    "sasl_plain_password": self._config.kafka_password,
+                }
+            )
+        self._kafka_producer = AIOKafkaProducer(**producer_args)
         await self._kafka_producer.start()
         logger.info("Connected to Kafka Broker [{}]", self._config.kafka_host)
         async for extracted in self.extract():

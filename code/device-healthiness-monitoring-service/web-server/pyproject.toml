@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "web-server"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = { extras = ["all"], version = "^0.110.0" }
+pydantic = "^2.6.3"
+pydantic-settings = "^2.2.1"
+psycopg = { extras = ["binary"], version = "^3.1.18" }
+psycopg-pool = "^3.2.1"
+loguru = "^0.7.2"
+pyjwt = "^2.8.0"
+async-lru = "^2.0.4"
+aiohttp = "^3.9.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
