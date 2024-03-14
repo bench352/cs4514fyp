@@ -6,7 +6,7 @@
     <option name="PARENT_ENVS" value="true" />
     <envs>
       <env name="GLOBAL_API_KEY" value="global-api-key" />
-      <env name="JWT_EXPIRE_IN_MINUTES" value="5" />
+      <env name="JWT_EXPIRE_IN_MINUTES" value="2880" />
       <env name="JWT_SECRET" value="my-jwt-secret" />
       <env name="MASTER_ADMIN_PASSWORD" value="password" />
       <env name="MASTER_ADMIN_USERNAME" value="admin" />
