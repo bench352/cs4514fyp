@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 
 export default function FloorCard(props: { floor: Floor }) {
     const navigate = useNavigate();
-    return (<Card>
+    return (<Card sx={{marginBottom:"10px"}}>
         <CardActionArea onClick={() => {
             navigate(`/floors/${props.floor.id}`)
         }}>

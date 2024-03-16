@@ -41,7 +41,7 @@ export default function CurrentUserDialog(props: AddAssetDialogProps) {
             setUserProfile(currentUser);
         } catch (e) {
             if (e instanceof Error) {
-                props.createSnackBar(e.message);
+                props.createErrorSnackBar(e.message);
             }
         } finally {
             props.setShowLoading(false);
@@ -125,7 +125,7 @@ export default function CurrentUserDialog(props: AddAssetDialogProps) {
                 </Stack>
             </DialogActions>
             <ChangePasswordDialog open={showChangePasswordDialog} setShowDialog={setShowChangePasswordDialog}
-                                  setShowLoading={props.setShowLoading} createSnackBar={props.createSnackBar}/>
+                                  setShowLoading={props.setShowLoading} createSnackBar={props.createErrorSnackBar}/>
         </Dialog>
     );
 }

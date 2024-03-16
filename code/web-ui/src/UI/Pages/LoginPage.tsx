@@ -3,7 +3,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import loginBG from "../images/bady-abbas-hxi_yRxODNc-unsplash.jpg";
+import loginBG from "../images/login-banner-image.jpg";
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import LoginOutlinedIcon from '@mui/icons-material/LoginOutlined';
@@ -86,6 +86,20 @@ function LoginCard() {
                     />
                     <LoadingButton variant="contained" endIcon={<LoginOutlinedIcon/>}
                                    onClick={handleSubmit(onLogin)} loading={loginButtonLoading}>Login</LoadingButton>
+                    <Typography variant="caption" display="block" textAlign="center"
+                                sx={{
+                                    color: "#757575", '& a': {
+                                        textDecoration: 'none',
+                                        color: "#757575", '&:hover': {
+                                            textDecoration: 'underline',
+                                        },
+                                    }
+                                }}>
+                        Banner image by <a
+                        href="https://unsplash.com/@bady?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">bady
+                        abbas</a> on <a
+                        href="https://unsplash.com/photos/white-cubby-shelf-hxi_yRxODNc?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
+                    </Typography>
                 </Stack>
 
             </CardContent>

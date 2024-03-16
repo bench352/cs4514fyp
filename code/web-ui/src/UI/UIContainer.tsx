@@ -27,10 +27,17 @@ import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import ApartmentOutlinedIcon from '@mui/icons-material/ApartmentOutlined';
 import HomePage from "./Pages/HomePage";
 import ListSubheader from '@mui/material/ListSubheader';
-import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import FloorsPage from "./Pages/FloorsPage";
 import MonitorHeartOutlinedIcon from '@mui/icons-material/MonitorHeartOutlined';
 import CurrentUserDialog from "./Components/Dialogs/CurrentUserDialog";
+import Fade from '@mui/material/Fade';
+import FlatsPage from "./Pages/FlatsPage";
+import MeetingRoomOutlinedIcon from '@mui/icons-material/MeetingRoomOutlined';
+import DevicesPage from "./Pages/DevicesPage";
+import MemoryOutlinedIcon from '@mui/icons-material/MemoryOutlined';
+import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
+import UsersPage from "./Pages/UsersPage";
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 
 const drawerWidth = 240;
 
@@ -39,6 +46,20 @@ const entityManagementItems = [
         name: "Floors",
         icon: <ApartmentOutlinedIcon/>,
         link: "/floors",
+    },
+    {
+        name: "Flats",
+        icon: <MeetingRoomOutlinedIcon/>,
+        link: "/flats",
+    },
+    {
+        name: "Devices",
+        icon: <MemoryOutlinedIcon/>,
+        link: "/devices",
+    }, {
+        name: "Users",
+        icon: <GroupOutlinedIcon/>,
+        link: "/users"
     }
 ]
 
@@ -64,7 +85,7 @@ export default function UIContainer() {
     const [snackBarMessage, setSnackBarMessage] = React.useState("");
     const [showSnackBar, setShowSnackBar] = React.useState(false);
     const [showCurrentUserDialog, setShowCurrentUserDialog] = React.useState(false);
-    const createSnackBar = (message: string) => {
+    const createErrorSnackBar = (message: string) => {
         setSnackBarMessage(message);
         setShowSnackBar(true);
     }
@@ -144,7 +165,7 @@ export default function UIContainer() {
                         setShowCurrentUserDialog(true);
                     }}>
                         <ListItemIcon>
-                            <PersonOutlineOutlinedIcon/>,
+                            <AccountCircleOutlinedIcon/>,
                         </ListItemIcon>
                         <ListItemText primary="Your Account"/>
                     </ListItemButton>
@@ -224,15 +245,36 @@ export default function UIContainer() {
                     <Route index path="/" element={<HomePage/>}/>
                     <Route path="floors">
                         <Route path=":id"
-                               element={<FloorsPage setShowLoading={setShowLoading} createSnackBar={createSnackBar}/>}/>
+                               element={<FloorsPage setShowLoading={setShowLoading}
+                                                    createErrorSnackBar={createErrorSnackBar}/>}/>
                         <Route path=""
-                               element={<FloorsPage setShowLoading={setShowLoading} createSnackBar={createSnackBar}/>}/>
+                               element={<FloorsPage setShowLoading={setShowLoading}
+                                                    createErrorSnackBar={createErrorSnackBar}/>}/>
+                    </Route>
+                    <Route path="flats">
+                        <Route path=":id" element={
+                            <FlatsPage setShowLoading={setShowLoading} createErrorSnackBar={createErrorSnackBar}/>}/>
+                        <Route path="" element={
+                            <FlatsPage setShowLoading={setShowLoading} createErrorSnackBar={createErrorSnackBar}/>}/>
+                    </Route>
+                    <Route path="devices">
+                        <Route path=":id" element={<DevicesPage setShowLoading={setShowLoading}
+                                                                createErrorSnackBar={createErrorSnackBar}/>}/>
+                        <Route path="" element={<DevicesPage setShowLoading={setShowLoading}
+                                                             createErrorSnackBar={createErrorSnackBar}/>}/>
+                    </Route>
+                    <Route path="users">
+                        <Route path=":id" element={<UsersPage setShowLoading={setShowLoading}
+                                                              createErrorSnackBar={createErrorSnackBar}/>}/>
+                        <Route path="" element={<UsersPage setShowLoading={setShowLoading}
+                                                           createErrorSnackBar={createErrorSnackBar}/>}/>
                     </Route>
                 </Routes>
             </Box>
             <Snackbar
                 anchorOrigin={{vertical: "bottom", horizontal: "center"}}
                 open={showLoading}
+                TransitionComponent={Fade}
             >
                 <Paper elevation={4} sx={{backgroundColor: "#212121"}}>
                     <Stack
@@ -251,7 +293,7 @@ export default function UIContainer() {
 
 
             </Snackbar>
-            <CurrentUserDialog setShowDialog={setShowCurrentUserDialog} createSnackBar={createSnackBar}
+            <CurrentUserDialog setShowDialog={setShowCurrentUserDialog} createErrorSnackBar={createErrorSnackBar}
                                setShowLoading={setShowLoading} open={showCurrentUserDialog}/>
         </Box>
     );

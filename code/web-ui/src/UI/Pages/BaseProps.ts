@@ -1,6 +1,6 @@
 export interface BasePageProps {
     setShowLoading: (visibility: boolean) => void;
-    createSnackBar: (message: string) => void;
+    createErrorSnackBar: (message: string) => void;
 }
 
 export interface AddAssetDialogProps extends BasePageProps {
@@ -10,5 +10,5 @@ export interface AddAssetDialogProps extends BasePageProps {
 
 export interface AssetDialogProps extends BasePageProps {
     open: boolean;
-    assetId?: string;
+    entityId?: string;
 }

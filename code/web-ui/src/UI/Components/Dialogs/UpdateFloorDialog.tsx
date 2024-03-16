@@ -22,18 +22,18 @@ export default function UpdateFloorDialog(props: AssetDialogProps) {
     const navigate = useNavigate();
     const [floor, setFloor] = useState(null as Floor | null);
     const loadAsset = async () => {
-        if (props.assetId === undefined) {
+        if (props.entityId === undefined) {
             setName("...");
             return navigate("/floors");
         }
         try {
             props.setShowLoading(true);
-            let currentFloor = await getFloor(token, props.assetId);
+            let currentFloor = await getFloor(token, props.entityId);
             setFloor(currentFloor);
             setName(currentFloor.name);
         } catch (e) {
             if (e instanceof Error) {
-                props.createSnackBar(e.message);
+                props.createErrorSnackBar(e.message);
                 navigate("/floors");
             }
         } finally {
@@ -41,16 +41,16 @@ export default function UpdateFloorDialog(props: AssetDialogProps) {
         }
     };
     const deleteAsset = async () => {
-        if (props.assetId === undefined) {
+        if (props.entityId === undefined) {
             return navigate("/floors");
         }
         try {
             props.setShowLoading(true);
-            await deleteFloor(token, props.assetId);
+            await deleteFloor(token, props.entityId);
             navigate("/floors");
         } catch (e) {
             if (e instanceof Error) {
-                props.createSnackBar(e.message);
+                props.createErrorSnackBar(e.message);
             }
         } finally {
             props.setShowLoading(false);
@@ -59,11 +59,11 @@ export default function UpdateFloorDialog(props: AssetDialogProps) {
     const updateAsset = async () => {
         try {
             props.setShowLoading(true);
-            await upsertFloor(token, {id: props.assetId, name: name});
+            await upsertFloor(token, {id: props.entityId, name: name});
             navigate("/floors");
         } catch (e) {
             if (e instanceof Error) {
-                props.createSnackBar(e.message);
+                props.createErrorSnackBar(e.message);
             }
         } finally {
             props.setShowLoading(false);
@@ -73,10 +73,9 @@ export default function UpdateFloorDialog(props: AssetDialogProps) {
     const [name, setName] = useState("");
     useEffect(() => {
         loadAsset();
-    }, [props.assetId]);
+    }, [props.entityId]);
     return (
-        <>
-            {<Dialog open={props.open}>
+        <Dialog maxWidth="xs" fullWidth={true} open={props.open}>
                 <DialogTitle>
                     <TextField fullWidth id="name" variant="standard" value={name} onChange={
                         (e) => {
@@ -124,9 +123,6 @@ export default function UpdateFloorDialog(props: AssetDialogProps) {
                         </Stack>
                     </Stack>
                 </DialogActions>
-
-            </Dialog>}
-        </>
-
+            </Dialog>
     )
 }

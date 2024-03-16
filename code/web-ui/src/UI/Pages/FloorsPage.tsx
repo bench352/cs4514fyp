@@ -13,6 +13,9 @@ import ApartmentOutlinedIcon from '@mui/icons-material/ApartmentOutlined';
 import {useParams} from "react-router-dom";
 import UpdateFloorDialog from "../Components/Dialogs/UpdateFloorDialog";
 import AddFloorDialog from "../Components/Dialogs/AddFloorDialog";
+import {TransitionGroup} from 'react-transition-group';
+import Collapse from '@mui/material/Collapse';
+import Zoom from '@mui/material/Zoom';
 
 const floatingButtonStyle = {
     margin: 0,
@@ -32,10 +35,11 @@ export default function FloorsPage(props: BasePageProps) {
     const refreshFloors = async () => {
         try {
             props.setShowLoading(true);
-            setFloors(await getFloors(token));
+            let currentFloors = await getFloors(token);
+            setFloors(currentFloors);
         } catch (e) {
             if (e instanceof Error) {
-                props.createSnackBar(e.message);
+                props.createErrorSnackBar(e.message);
             }
         } finally {
             props.setShowLoading(false);
@@ -46,16 +50,18 @@ export default function FloorsPage(props: BasePageProps) {
         refreshFloors()
     }, [id, showAddDialog])
     useEffect(() => {
-        setShowUpdateDialog(id !== undefined)
+        setShowUpdateDialog(id !== undefined);
     }, [id]);
     return (
         <Container>
-            <Fab sx={floatingButtonStyle} variant="extended" onClick={() => {
-                setShowAddDialog(true)
-            }}>
-                <AddOutlinedIcon sx={{mr: 1}}/>
-                Add Floor
-            </Fab>
+            <Zoom in={true}>
+                <Fab sx={floatingButtonStyle} variant="extended" onClick={() => {
+                    setShowAddDialog(true)
+                }}>
+                    <AddOutlinedIcon sx={{mr: 1}}/>
+                    Add Floor
+                </Fab>
+            </Zoom>
             <Stack
                 direction="row"
                 justifyContent="flex-start"
@@ -71,18 +77,14 @@ export default function FloorsPage(props: BasePageProps) {
                     </Typography></div>
 
             </Stack>
-            <Stack
-                direction="column"
-                justifyContent="center"
-                alignItems="stretch"
-                spacing={1}
-            >
-                {floors.map(floor => (<FloorCard floor={floor}/>))}
-            </Stack>
-            <UpdateFloorDialog open={showUpdateDialog} assetId={id} setShowLoading={props.setShowLoading}
-                               createSnackBar={props.createSnackBar}/>
+            <TransitionGroup>
+                {floors.map(floor => (
+                    <Collapse key={floor.id}><FloorCard key={floor.id} floor={floor}/></Collapse>))}
+            </TransitionGroup>
+            <UpdateFloorDialog open={showUpdateDialog} entityId={id} setShowLoading={props.setShowLoading}
+                               createErrorSnackBar={props.createErrorSnackBar}/>
             <AddFloorDialog setShowDialog={setShowAddDialog} open={showAddDialog} setShowLoading={props.setShowLoading}
-                            createSnackBar={props.createSnackBar}/>
+                            createErrorSnackBar={props.createErrorSnackBar}/>
         </Container>
     );
 }

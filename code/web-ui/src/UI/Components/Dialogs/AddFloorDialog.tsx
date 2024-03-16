@@ -29,7 +29,7 @@ export default function AddFloorDialog(props: AddAssetDialogProps) {
             props.setShowDialog(false);
         } catch (e) {
             if (e instanceof Error) {
-                props.createSnackBar(e.message);
+                props.createErrorSnackBar(e.message);
             }
         } finally {
             props.setShowLoading(false);
@@ -37,7 +37,7 @@ export default function AddFloorDialog(props: AddAssetDialogProps) {
     }
     const [name, setName] = useState("");
     return (
-        <Dialog open={props.open} fullWidth maxWidth="sm">
+        <Dialog open={props.open} fullWidth maxWidth="xs">
             <DialogTitle>
                 Add Floor
             </DialogTitle>

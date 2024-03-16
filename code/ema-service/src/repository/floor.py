@@ -64,6 +64,12 @@ class FloorRepository:
     @staticmethod
     def delete(_id: str) -> None:
         with get_session() as session:
-            statement = delete(models.Floor).where(models.Floor.id == _id)
-            session.execute(statement)
-            session.commit()
+            try:
+                statement = delete(models.Floor).where(models.Floor.id == _id)
+                session.execute(statement)
+                session.commit()
+            except IntegrityError:
+                raise HTTPException(
+                    status_code=status.HTTP_409_CONFLICT,
+                    detail=f"Floor with id [{_id}] is in use by one or more flats and cannot be deleted",
+                )
