@@ -15,7 +15,7 @@ import HealthinessCard, {
   HealthinessCardEntry,
 } from "../Components/Cards/HealthinessCard";
 import { useAppSelector } from "../../hooks";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { env } from "../../env";
 import { Anomaly } from "../../Schemas/healthiness";
 import { getDevices } from "../../Repository/ema/devices";
@@ -76,19 +76,16 @@ export default function HealthinessPage(props: BasePageProps) {
   const { lastJsonMessage, readyState } = useWebSocket(
     `${env.REACT_APP_DEVICE_HEALTH_SERVICE_WS_URL}/real-time?token=` + token,
   );
-  const updateHealthinessCardMap = useCallback(
-    (anomalyResult: Anomaly) => {
-      const newMap = new Map<string, HealthinessCardEntry>(healthinessCardMap);
-      anomalyResult.data.forEach((anomalyKey) => {
-        newMap
-          .get(anomalyResult.deviceId)
-          ?.latestValues.set(anomalyKey.key, anomalyKey.values[0].isAnomaly);
-      });
-      setHealthinessCardMap(newMap);
-    },
-    [healthinessCardMap],
-  );
-  const startStream = useCallback(async () => {
+  const updateHealthinessCardMap = (anomalyResult: Anomaly) => {
+    const newMap = new Map<string, HealthinessCardEntry>(healthinessCardMap);
+    anomalyResult.data.forEach((anomalyKey) => {
+      newMap
+        .get(anomalyResult.deviceId)
+        ?.latestValues.set(anomalyKey.key, anomalyKey.values[0].isAnomaly);
+    });
+    setHealthinessCardMap(newMap);
+  };
+  const startStream = async () => {
     try {
       props.setShowLoading(true);
       let devices = await getDevices(token);
@@ -109,13 +106,13 @@ export default function HealthinessPage(props: BasePageProps) {
     } finally {
       props.setShowLoading(false);
     }
-  }, [props, token]);
+  };
   useEffect(() => {
     startStream();
-  }, [startStream]);
+  }, []);
   useEffect(() => {
     lastJsonMessage && updateHealthinessCardMap(lastJsonMessage as Anomaly);
-  }, [lastJsonMessage, updateHealthinessCardMap]);
+  }, [lastJsonMessage]);
   return (
     <Container>
       <Stack

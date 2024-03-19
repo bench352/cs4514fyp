@@ -82,7 +82,7 @@ export default function ChangePasswordDialog(props: ChangePasswordDialogProps) {
       oldPassword: "",
       newPassword: "",
     });
-  }, [props.open, reset]);
+  }, [props.open]);
   return (
     <Dialog open={props.open} fullWidth maxWidth="xs">
       <DialogTitle>Change Password</DialogTitle>

@@ -5,7 +5,7 @@ import {
   upsertFloor,
 } from "../../../../Repository/ema/floors";
 import { useAppSelector } from "../../../../hooks";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DialogTitle from "@mui/material/DialogTitle";
 import IconButton from "@mui/material/IconButton";
@@ -23,7 +23,7 @@ import TextField from "@mui/material/TextField";
 export default function UpdateFloorDialog(props: AssetDialogProps) {
   const token = useAppSelector((state) => state.auth.token);
   const navigate = useNavigate();
-  const loadAsset = useCallback(async () => {
+  const loadAsset = async () => {
     if (props.entityId === undefined) {
       setName("...");
       return navigate("/floors");
@@ -40,7 +40,7 @@ export default function UpdateFloorDialog(props: AssetDialogProps) {
     } finally {
       props.setShowLoading(false);
     }
-  }, [navigate, props, token]);
+  };
   const deleteAsset = async () => {
     if (props.entityId === undefined) {
       return navigate("/floors");
@@ -74,7 +74,7 @@ export default function UpdateFloorDialog(props: AssetDialogProps) {
   const [name, setName] = useState("");
   useEffect(() => {
     loadAsset();
-  }, [loadAsset, props.entityId]);
+  }, [props.entityId]);
   return (
     <Dialog maxWidth="xs" fullWidth={true} open={props.open}>
       <DialogTitle>

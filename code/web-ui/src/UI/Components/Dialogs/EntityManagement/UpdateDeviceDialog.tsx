@@ -1,7 +1,7 @@
 import { AssetDialogProps } from "../../../Pages/BaseProps";
 import { useAppSelector } from "../../../../hooks";
 import { useNavigate } from "react-router-dom";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Device, Flat } from "../../../../Schemas/ema";
 import { getFlats } from "../../../../Repository/ema/flats";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -33,7 +33,7 @@ export default function UpdateDeviceDialog(props: AssetDialogProps) {
   const [displayName, setDisplayName] = useState("" as string);
   const [description, setDescription] = useState("" as string);
   const [selectFlatId, setSelectFlatId] = useState("" as string);
-  const loadAsset = useCallback(async () => {
+  const loadAsset = async () => {
     if (props.entityId === undefined) {
       setDisplayName("");
       setDescription("");
@@ -55,7 +55,7 @@ export default function UpdateDeviceDialog(props: AssetDialogProps) {
     } finally {
       props.setShowLoading(false);
     }
-  }, [navigate, props, token]);
+  };
   const deleteAsset = async () => {
     if (props.entityId === undefined) {
       return navigate("/devices");
@@ -90,7 +90,7 @@ export default function UpdateDeviceDialog(props: AssetDialogProps) {
   };
   useEffect(() => {
     loadAsset();
-  }, [loadAsset, props.open]);
+  }, [props.entityId]);
   return (
     <Dialog maxWidth="xs" fullWidth={true} open={props.open}>
       <DialogTitle>

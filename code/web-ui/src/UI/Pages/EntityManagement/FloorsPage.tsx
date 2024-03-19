@@ -5,7 +5,7 @@ import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import Typography from "@mui/material/Typography";
 import { Floor } from "../../../Schemas/ema";
 import Stack from "@mui/material/Stack";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import FloorCard from "../../Components/Cards/FloorCard";
 import { getFloors } from "../../../Repository/ema/floors";
 import { useAppSelector } from "../../../hooks";
@@ -32,7 +32,7 @@ export default function FloorsPage(props: BasePageProps) {
   const [floors, setFloors] = useState([] as Floor[]);
   let { id } = useParams();
   const [showAddDialog, setShowAddDialog] = useState(false);
-  const refreshFloors = useCallback(async () => {
+  const refreshFloors = async () => {
     try {
       props.setShowLoading(true);
       let currentFloors = await getFloors(token);
@@ -44,11 +44,11 @@ export default function FloorsPage(props: BasePageProps) {
     } finally {
       props.setShowLoading(false);
     }
-  }, [props, token]);
+  };
 
   useEffect(() => {
     refreshFloors();
-  }, [id, refreshFloors, showAddDialog]);
+  }, [id, showAddDialog]);
   useEffect(() => {
     setShowUpdateDialog(id !== undefined);
   }, [id]);

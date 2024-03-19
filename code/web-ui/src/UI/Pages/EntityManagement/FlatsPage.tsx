@@ -4,7 +4,7 @@ import Fab from "@mui/material/Fab";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { getFloors } from "../../../Repository/ema/floors";
 import { useAppSelector } from "../../../hooks";
 import { useParams } from "react-router-dom";
@@ -41,7 +41,7 @@ export default function FlatsPage(props: BasePageProps) {
   useEffect(() => {
     setShowUpdateDialog(id !== undefined);
   }, [id]);
-  const refreshFlats = useCallback(async () => {
+  const refreshFlats = async () => {
     try {
       props.setShowLoading(true);
       let allFlats = await getFlats(token);
@@ -63,10 +63,10 @@ export default function FlatsPage(props: BasePageProps) {
     } finally {
       props.setShowLoading(false);
     }
-  }, [props, token]);
+  };
   useEffect(() => {
     refreshFlats();
-  }, [id, refreshFlats, showAddDialog]);
+  }, [id, showAddDialog]);
   return (
     <Container>
       <Zoom in={true}>

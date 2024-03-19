@@ -1,7 +1,7 @@
 import { AssetDialogProps } from "../../../Pages/BaseProps";
 import { useAppSelector } from "../../../../hooks";
 import { useNavigate } from "react-router-dom";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Flat, Role } from "../../../../Schemas/ema";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -35,7 +35,7 @@ export default function UpdateUserDialog(props: AssetDialogProps) {
   const [userRole, setUserRole] = useState("RESIDENT" as Role);
   const [flatId, setFlatId] = useState("");
   const [flats, setFlats] = useState([] as Flat[]);
-  const loadAsset = useCallback(async () => {
+  const loadAsset = async () => {
     if (props.entityId === undefined) {
       setUsername("");
       setFullName("");
@@ -61,7 +61,7 @@ export default function UpdateUserDialog(props: AssetDialogProps) {
     } finally {
       props.setShowLoading(false);
     }
-  }, [navigate, props, token]);
+  };
   const deleteAsset = async () => {
     if (props.entityId === undefined) {
       return navigate("/users");
@@ -107,7 +107,7 @@ export default function UpdateUserDialog(props: AssetDialogProps) {
   };
   useEffect(() => {
     loadAsset();
-  }, [loadAsset, props.open]);
+  }, [props.open]);
   return (
     <Dialog maxWidth="xs" fullWidth={true} open={props.open}>
       <DialogTitle>

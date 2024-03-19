@@ -13,7 +13,7 @@ import Paper from "@mui/material/Paper";
 import { Chart } from "react-chartjs-2";
 import { DateTime } from "luxon";
 import { useNavigate, useParams } from "react-router-dom";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Device } from "../../Schemas/ema";
 import { getDevice } from "../../Repository/ema/devices";
 import { useAppSelector } from "../../hooks";
@@ -84,7 +84,7 @@ export default function HealthinessDetailPage(props: BasePageProps) {
   const [queryToTs, setQueryToTs] = useState(
     DateTime.now().toISO().slice(0, 16),
   );
-  const queryData = useCallback(async () => {
+  const queryData = async () => {
     try {
       if (id === undefined) {
         return navigate("/healthiness");
@@ -138,10 +138,10 @@ export default function HealthinessDetailPage(props: BasePageProps) {
     } finally {
       props.setShowLoading(false);
     }
-  }, [id, navigate, props, queryFromTs, queryToTs, token]);
+  };
   useEffect(() => {
     queryData();
-  }, [queryData]);
+  }, []);
   return (
     <Container>
       <Button

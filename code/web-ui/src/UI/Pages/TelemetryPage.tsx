@@ -5,7 +5,7 @@ import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import TelemetryCard, {
   TelemetryCardEntry,
 } from "../Components/Cards/TelemetryCard";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppSelector } from "../../hooks";
 import { getDevices } from "../../Repository/ema/devices";
 import { Telemetry } from "../../Schemas/data";
@@ -77,20 +77,17 @@ export default function TelemetryPage(props: BasePageProps) {
   const { lastJsonMessage, readyState } = useWebSocket(
     env.REACT_APP_DEVICE_DATA_SERVICE_WS_URL + "/real-time?token=" + token,
   );
-  const updateTelemetryCardMap = useCallback(
-    (telemetry: Telemetry) => {
-      const newMap = new Map<string, TelemetryCardEntry>(telemetryCardMap);
-      telemetry.data.forEach((telemetryKey) => {
-        newMap
-          .get(telemetry.deviceId)
-          ?.latestValues.set(telemetryKey.key, telemetryKey.values[0].value);
-      });
+  const updateTelemetryCardMap = (telemetry: Telemetry) => {
+    const newMap = new Map<string, TelemetryCardEntry>(telemetryCardMap);
+    telemetry.data.forEach((telemetryKey) => {
+      newMap
+        .get(telemetry.deviceId)
+        ?.latestValues.set(telemetryKey.key, telemetryKey.values[0].value);
+    });
 
-      setTelemetryCardMap(newMap);
-    },
-    [telemetryCardMap],
-  );
-  const startStream = useCallback(async () => {
+    setTelemetryCardMap(newMap);
+  };
+  const startStream = async () => {
     try {
       props.setShowLoading(true);
       let devices = await getDevices(token);
@@ -111,13 +108,13 @@ export default function TelemetryPage(props: BasePageProps) {
     } finally {
       props.setShowLoading(false);
     }
-  }, [props, token]);
+  };
   useEffect(() => {
     startStream();
-  }, [startStream]);
+  }, []);
   useEffect(() => {
     lastJsonMessage && updateTelemetryCardMap(lastJsonMessage as Telemetry);
-  }, [lastJsonMessage, updateTelemetryCardMap]);
+  }, [lastJsonMessage]);
   return (
     <Container>
       <Stack

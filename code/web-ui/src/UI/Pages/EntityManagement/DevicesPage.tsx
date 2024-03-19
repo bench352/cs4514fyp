@@ -1,6 +1,6 @@
 import { BasePageProps } from "../BaseProps";
 import { useAppSelector } from "../../../hooks";
-import { useCallback } from "react";
+
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Container from "@mui/material/Container";
@@ -40,7 +40,7 @@ export default function DevicesPage(props: BasePageProps) {
   let { id } = useParams();
   const [showUpdateDialog, setShowUpdateDialog] = useState(false);
   const [devices, setDevices] = useState([] as DeviceRepresentation[]);
-  const refreshDevices = useCallback(async () => {
+  const refreshDevices = async () => {
     try {
       props.setShowLoading(true);
       let allDevices = await getDevices(token);
@@ -63,14 +63,14 @@ export default function DevicesPage(props: BasePageProps) {
     } finally {
       props.setShowLoading(false);
     }
-  }, [props, token]);
+  };
 
   useEffect(() => {
     setShowUpdateDialog(id !== undefined);
   }, [id]);
   useEffect(() => {
     refreshDevices();
-  }, [id, refreshDevices, showAddDialog]);
+  }, [id, showAddDialog]);
   return (
     <Container>
       <Zoom in={true}>

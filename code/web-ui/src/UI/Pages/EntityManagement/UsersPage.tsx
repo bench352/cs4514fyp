@@ -1,6 +1,6 @@
 import { BasePageProps } from "../BaseProps";
 import { useAppSelector } from "../../../hooks";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Container from "@mui/material/Container";
 import Zoom from "@mui/material/Zoom";
@@ -32,7 +32,7 @@ export default function UsersPage(props: BasePageProps) {
   let { id } = useParams();
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [userDetails, setUserDetails] = useState([] as UserDetail[]);
-  const refreshUsers = useCallback(async () => {
+  const refreshUsers = async () => {
     try {
       props.setShowLoading(true);
       setUserDetails(await getUsers(token));
@@ -43,10 +43,10 @@ export default function UsersPage(props: BasePageProps) {
     } finally {
       props.setShowLoading(false);
     }
-  }, [props, token]);
+  };
   useEffect(() => {
     refreshUsers();
-  }, [id, refreshUsers, showAddDialog]);
+  }, [id, showAddDialog]);
   useEffect(() => {
     setShowUpdateDialog(id !== undefined);
   }, [id]);

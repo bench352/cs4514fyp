@@ -1,7 +1,7 @@
 import { AssetDialogProps } from "../../../Pages/BaseProps";
 import { useAppSelector } from "../../../../hooks";
 import { useNavigate } from "react-router-dom";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Flat, Floor } from "../../../../Schemas/ema";
 import { getFloors } from "../../../../Repository/ema/floors";
 import {
@@ -31,7 +31,7 @@ export default function UpdateFlatDialog(props: AssetDialogProps) {
   const [flat, setFlat] = useState(null as Flat | null);
   const [floors, setFloors] = useState([] as Floor[]);
   const [selectFloorId, setSelectFloorId] = useState("" as string);
-  const loadAsset = useCallback(async () => {
+  const loadAsset = async () => {
     if (props.entityId === undefined) {
       return navigate("/flats");
     }
@@ -49,7 +49,7 @@ export default function UpdateFlatDialog(props: AssetDialogProps) {
     } finally {
       props.setShowLoading(false);
     }
-  }, [navigate, props, token]);
+  };
   const deleteAsset = async () => {
     if (props.entityId === undefined) {
       return navigate("/flats");
@@ -84,7 +84,7 @@ export default function UpdateFlatDialog(props: AssetDialogProps) {
   };
   useEffect(() => {
     loadAsset();
-  }, [props.open, props.entityId, loadAsset]);
+  }, [props.open, props.entityId]);
   return (
     <Dialog maxWidth="xs" fullWidth={true} open={props.open}>
       <DialogTitle>

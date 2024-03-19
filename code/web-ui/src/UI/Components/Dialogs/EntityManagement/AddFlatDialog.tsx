@@ -2,7 +2,7 @@ import { AddAssetDialogProps } from "../../../Pages/BaseProps";
 import { useAppSelector } from "../../../../hooks";
 import { Flat, Floor } from "../../../../Schemas/ema";
 import { getFloors } from "../../../../Repository/ema/floors";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
@@ -24,7 +24,7 @@ export default function AddFlatDialog(props: AddAssetDialogProps) {
   const [name, setName] = useState("");
   const [floorId, setFloorId] = useState("");
   const [floors, setFloors] = useState([] as Floor[]);
-  const refreshOptions = useCallback(async () => {
+  const refreshOptions = async () => {
     props.setShowLoading(true);
     let currentFloors = await getFloors(token);
     setFloors(currentFloors);
@@ -33,7 +33,7 @@ export default function AddFlatDialog(props: AddAssetDialogProps) {
       setFloorId(currentFloors[0]?.id as string);
     }
     props.setShowLoading(false);
-  }, [props, token]);
+  };
   const insertAsset = async () => {
     try {
       props.setShowLoading(true);
@@ -53,7 +53,7 @@ export default function AddFlatDialog(props: AddAssetDialogProps) {
   };
   useEffect(() => {
     refreshOptions();
-  }, [props.open, refreshOptions]);
+  }, [props.open]);
   return (
     <Dialog open={props.open} fullWidth maxWidth="xs">
       <DialogTitle>Add Floor</DialogTitle>

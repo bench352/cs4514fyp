@@ -12,7 +12,7 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { DateTime } from "luxon";
 import { getHistoricalData } from "../../Repository/data";
 import { useAppSelector } from "../../hooks";
@@ -62,7 +62,7 @@ export default function TelemetryDetailPage(props: BasePageProps) {
   const [queryToTs, setQueryToTs] = useState(
     DateTime.now().toISO().slice(0, 16),
   );
-  const queryData = useCallback(async () => {
+  const queryData = async () => {
     try {
       if (id === undefined) {
         return navigate("/telemetry");
@@ -81,10 +81,10 @@ export default function TelemetryDetailPage(props: BasePageProps) {
     } finally {
       props.setShowLoading(false);
     }
-  }, [id, navigate, props, queryFromTs, queryToTs, token]);
+  };
   useEffect(() => {
     queryData();
-  }, [queryData]);
+  }, []);
   return (
     <Container>
       <Button

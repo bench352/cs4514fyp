@@ -1,6 +1,6 @@
 import { AddAssetDialogProps } from "../../../Pages/BaseProps";
 import { useAppSelector } from "../../../../hooks";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Device, Flat } from "../../../../Schemas/ema";
 import { getFlats } from "../../../../Repository/ema/flats";
 import Dialog from "@mui/material/Dialog";
@@ -27,7 +27,7 @@ export default function AddDeviceDialog(props: AddAssetDialogProps) {
   const [description, setDescription] = useState("");
   const [displayName, setDisplayName] = useState("");
 
-  const refreshOptions = useCallback(async () => {
+  const refreshOptions = async () => {
     try {
       props.setShowLoading(true);
       let currentFlats = await getFlats(token);
@@ -45,7 +45,7 @@ export default function AddDeviceDialog(props: AddAssetDialogProps) {
     } finally {
       props.setShowLoading(false);
     }
-  }, [props, token]);
+  };
   const insertAsset = async () => {
     try {
       props.setShowLoading(true);
@@ -67,7 +67,7 @@ export default function AddDeviceDialog(props: AddAssetDialogProps) {
   };
   useEffect(() => {
     refreshOptions();
-  }, [props.open, refreshOptions]);
+  }, [props.open]);
   return (
     <Dialog open={props.open} fullWidth maxWidth="xs">
       <DialogTitle>Add Device</DialogTitle>

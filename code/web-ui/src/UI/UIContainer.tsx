@@ -2,7 +2,7 @@
 // Customized for the purpose of the project
 
 import * as React from "react";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
@@ -99,7 +99,7 @@ export default function UIContainer() {
   const [showCurrentUserDialog, setShowCurrentUserDialog] =
     React.useState(false);
   const [userDetail, setUserDetail] = useState(null as UserDetail | null);
-  const loadUser = useCallback(async () => {
+  const loadUser = async () => {
     try {
       setShowLoading(true);
       let currentUser = await emaService.getUserProfile(token);
@@ -111,7 +111,7 @@ export default function UIContainer() {
     } finally {
       setShowLoading(false);
     }
-  }, [token]);
+  };
   const createErrorSnackBar = (message: string) => {
     setSnackBarMessage(message);
     setShowSnackBar(true);
@@ -224,7 +224,7 @@ export default function UIContainer() {
   );
   useEffect(() => {
     loadUser();
-  }, [loadUser]);
+  }, []);
   return (
     <Box sx={{ display: "flex" }}>
       <Snackbar

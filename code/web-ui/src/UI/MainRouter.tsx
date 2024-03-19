@@ -12,7 +12,7 @@ export default function MainRouter() {
       navigate("/login");
     }
   };
-  useEffect(handleLogin, [isAuthenticated, navigate]);
+  useEffect(handleLogin, []);
   return (
     <Routes>
       <Route index path="/*" element={<UIContainer />} />
