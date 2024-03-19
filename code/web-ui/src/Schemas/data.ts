@@ -1,14 +1,14 @@
 export interface TelemetryDataPoint {
-    timestamp: string;
-    value: number;
+  timestamp: string;
+  value: number;
 }
 
 export interface TelemetryKey {
-    key: string;
-    values: TelemetryDataPoint[];
+  key: string;
+  values: TelemetryDataPoint[];
 }
 
 export interface Telemetry {
-    deviceId: string;
-    data: TelemetryKey[];
+  deviceId: string;
+  data: TelemetryKey[];
 }
