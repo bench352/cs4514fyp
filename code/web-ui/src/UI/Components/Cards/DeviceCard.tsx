@@ -4,7 +4,7 @@ import {CardActionArea} from "@mui/material";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Chip from "@mui/material/Chip";
-import {DeviceRepresentation} from "../../Pages/DevicesPage";
+import {DeviceRepresentation} from "../../Pages/EntityManagement/DevicesPage";
 import MemoryOutlinedIcon from '@mui/icons-material/MemoryOutlined';
 
 

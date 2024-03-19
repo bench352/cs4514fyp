@@ -28,18 +28,26 @@ async def _transform_and_broadcast(msg: bytes):
             )
         ],
     )
-    await sub_manager.broadcast(_id, telemetry_data.model_dump_json())
+    await sub_manager.broadcast(_id, telemetry_data.model_dump_json(by_alias=True))
 
 
 async def fetch_data_in_background():
+    consumer_args = {
+        "bootstrap_servers": f"{kafka_config.kafka_host}:{kafka_config.kafka_port}",
+        "group_id": kafka_config.kafka_client_id,
+    }
+    if kafka_config.kafka_auth_enabled:
+        consumer_args.update(
+            {
+                "security_protocol": "SASL_PLAINTEXT",
+                "sasl_mechanism": "PLAIN",
+                "sasl_plain_username": kafka_config.kafka_username,
+                "sasl_plain_password": kafka_config.kafka_password,
+            }
+        )
     consumer = AIOKafkaConsumer(
         kafka_config.kafka_topic,
-        bootstrap_servers=f"{kafka_config.kafka_host}:{kafka_config.kafka_port}",
-        group_id=kafka_config.kafka_client_id,
-        security_protocol="SASL_PLAINTEXT",
-        sasl_mechanism="PLAIN",
-        sasl_plain_username=kafka_config.kafka_username,
-        sasl_plain_password=kafka_config.kafka_password,
+        **consumer_args,
     )
     await consumer.start()
     logger.info(

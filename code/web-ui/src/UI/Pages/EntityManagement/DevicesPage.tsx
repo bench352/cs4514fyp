@@ -1,5 +1,5 @@
-import {BasePageProps} from "./BaseProps";
-import {useAppSelector} from "../../hooks";
+import {BasePageProps} from "../BaseProps";
+import {useAppSelector} from "../../../hooks";
 import * as React from "react";
 import {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
@@ -11,13 +11,13 @@ import Typography from "@mui/material/Typography";
 import {TransitionGroup} from "react-transition-group";
 import Zoom from '@mui/material/Zoom';
 import MemoryOutlinedIcon from '@mui/icons-material/MemoryOutlined';
-import {Flat} from "../../Schemas/ema";
-import {getDevices} from "../../Repository/ema/devices";
-import {getFlats} from "../../Repository/ema/flats";
+import {Flat} from "../../../Schemas/ema";
+import {getDevices} from "../../../Repository/ema/devices";
+import {getFlats} from "../../../Repository/ema/flats";
 import Collapse from "@mui/material/Collapse";
-import DeviceCard from "../Components/Cards/DeviceCard";
-import UpdateDeviceDialog from "../Components/Dialogs/UpdateDeviceDialog";
-import AddDeviceDialog from "../Components/Dialogs/AddDeviceDialog";
+import DeviceCard from "../../Components/Cards/DeviceCard";
+import UpdateDeviceDialog from "../../Components/Dialogs/EntityManagement/UpdateDeviceDialog";
+import AddDeviceDialog from "../../Components/Dialogs/EntityManagement/AddDeviceDialog";
 
 const floatingButtonStyle = {
     margin: 0,

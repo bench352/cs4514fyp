@@ -1,8 +1,8 @@
-import {AssetDialogProps} from "../../Pages/BaseProps";
-import {useAppSelector} from "../../../hooks";
+import {AssetDialogProps} from "../../../Pages/BaseProps";
+import {useAppSelector} from "../../../../hooks";
 import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
-import {Flat, Role} from "../../../Schemas/ema";
+import {Flat, Role} from "../../../../Schemas/ema";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
@@ -18,8 +18,8 @@ import IconButton from "@mui/material/IconButton";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
-import {addFlatToUser, deleteUser, getUser, removeUserFromFlat, updateUser} from "../../../Repository/ema/users";
-import {getFlats} from "../../../Repository/ema/flats";
+import {addFlatToUser, deleteUser, getUser, removeUserFromFlat, updateUser} from "../../../../Repository/ema/users";
+import {getFlats} from "../../../../Repository/ema/flats";
 
 export default function UpdateUserDialog(props: AssetDialogProps) {
     const token = useAppSelector((state) => state.auth.token);
@@ -150,7 +150,7 @@ export default function UpdateUserDialog(props: AssetDialogProps) {
                                 label="Assigned To Flat"
                             >
                                 <MenuItem value=""><em>Unassigned</em></MenuItem>
-                                {flats.map(flat => <MenuItem value={flat.id as string}>{flat.name}</MenuItem>)}
+                                {flats.map(flat => <MenuItem key={flat.id} value={flat.id as string}>{flat.name}</MenuItem>)}
                             </Select>
                         </FormControl>
                     ) : ""}

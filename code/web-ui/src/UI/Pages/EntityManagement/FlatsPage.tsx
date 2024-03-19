@@ -1,20 +1,20 @@
-import {BasePageProps} from "./BaseProps";
+import {BasePageProps} from "../BaseProps";
 import Container from '@mui/material/Container';
 import Fab from '@mui/material/Fab';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import {useEffect, useState} from "react";
-import {getFloors} from "../../Repository/ema/floors";
-import {useAppSelector} from "../../hooks";
+import {getFloors} from "../../../Repository/ema/floors";
+import {useAppSelector} from "../../../hooks";
 import {useParams} from "react-router-dom";
 import MeetingRoomOutlinedIcon from '@mui/icons-material/MeetingRoomOutlined';
-import {getFlats} from "../../Repository/ema/flats";
-import FlatCard from "../Components/Cards/FlatCard";
-import UpdateFlatDialog from "../Components/Dialogs/UpdateFlatDialog";
+import {getFlats} from "../../../Repository/ema/flats";
+import FlatCard from "../../Components/Cards/FlatCard";
+import UpdateFlatDialog from "../../Components/Dialogs/EntityManagement/UpdateFlatDialog";
 import {TransitionGroup} from 'react-transition-group';
 import Collapse from '@mui/material/Collapse';
-import AddFlatDialog from "../Components/Dialogs/AddFlatDialog";
+import AddFlatDialog from "../../Components/Dialogs/EntityManagement/AddFlatDialog";
 import Zoom from '@mui/material/Zoom';
 
 const floatingButtonStyle = {

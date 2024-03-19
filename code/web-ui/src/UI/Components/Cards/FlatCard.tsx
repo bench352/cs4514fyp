@@ -1,4 +1,4 @@
-import {FlatPresentation} from "../../Pages/FlatsPage";
+import {FlatPresentation} from "../../Pages/EntityManagement/FlatsPage";
 import Card from "@mui/material/Card";
 import {CardActionArea} from "@mui/material";
 import Stack from "@mui/material/Stack";

@@ -1,5 +1,5 @@
-import {BasePageProps} from "./BaseProps";
-import {useAppSelector} from "../../hooks";
+import {BasePageProps} from "../BaseProps";
+import {useAppSelector} from "../../../hooks";
 import {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import Container from "@mui/material/Container";
@@ -10,12 +10,12 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
 import {TransitionGroup} from "react-transition-group";
-import {UserDetail} from "../../Schemas/ema";
-import {getUsers} from "../../Repository/ema/users";
-import UserCard from "../Components/Cards/UserCard";
+import {UserDetail} from "../../../Schemas/ema";
+import {getUsers} from "../../../Repository/ema/users";
+import UserCard from "../../Components/Cards/UserCard";
 import Collapse from '@mui/material/Collapse';
-import UpdateUserDialog from "../Components/Dialogs/UpdateUserDialog";
-import AddUserDialog from "../Components/Dialogs/AddUserDialog";
+import UpdateUserDialog from "../../Components/Dialogs/EntityManagement/UpdateUserDialog";
+import AddUserDialog from "../../Components/Dialogs/EntityManagement/AddUserDialog";
 
 const floatingButtonStyle = {
     margin: 0,

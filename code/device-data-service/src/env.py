@@ -30,3 +30,4 @@ class KafkaConfig(BaseSettings):
     kafka_password: str
     kafka_topic: str
     kafka_client_id: str
+    kafka_auth_enabled: bool

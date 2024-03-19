@@ -1,8 +1,8 @@
-import {AddAssetDialogProps} from "../../Pages/BaseProps";
-import {useAppSelector} from "../../../hooks";
+import {AddAssetDialogProps} from "../../../Pages/BaseProps";
+import {useAppSelector} from "../../../../hooks";
 import {useNavigate} from "react-router-dom";
-import {useState} from "react";
-import {Role} from "../../../Schemas/ema";
+import {useEffect, useState} from "react";
+import {Role} from "../../../../Schemas/ema";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
@@ -17,7 +17,7 @@ import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
-import {createUser} from "../../../Repository/ema/users";
+import {createUser} from "../../../../Repository/ema/users";
 
 export default function AddUserDialog(props: AddAssetDialogProps) {
     const token = useAppSelector((state) => state.auth.token);
@@ -26,7 +26,12 @@ export default function AddUserDialog(props: AddAssetDialogProps) {
     const [fullname, setFullname] = useState("");
     const [role, setRole] = useState("RESIDENT" as Role);
     const [initPassword, setInitPassword] = useState("");
-
+    const resetFields = () => {
+        setUsername("");
+        setFullname("");
+        setRole("RESIDENT");
+        setInitPassword("");
+    }
     const insertAsset = async () => {
         try {
             props.setShowLoading(true);
@@ -46,11 +51,13 @@ export default function AddUserDialog(props: AddAssetDialogProps) {
             props.setShowLoading(false);
         }
     }
-
+    useEffect(() => {
+        resetFields()
+    }, [props.open]);
     return (
         <Dialog open={props.open} fullWidth maxWidth="xs">
             <DialogTitle>
-                Add Floor
+                Add User
             </DialogTitle>
             <DialogContent>
                 <Stack
@@ -70,13 +77,13 @@ export default function AddUserDialog(props: AddAssetDialogProps) {
                         }}
                     />
                     <FormControl variant="standard" fullWidth>
-                        <InputLabel>Floor</InputLabel>
+                        <InputLabel>Role</InputLabel>
                         <Select
                             value={role}
                             onChange={(e: SelectChangeEvent) => {
                                 setRole(e.target.value as Role)
                             }}
-                            label="Floor"
+                            label="Role"
                         >
                             <MenuItem value="LANDLORD">Landlord</MenuItem>
                             <MenuItem value="RESIDENT">Resident</MenuItem>

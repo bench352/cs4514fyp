@@ -27,17 +27,21 @@ import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import ApartmentOutlinedIcon from '@mui/icons-material/ApartmentOutlined';
 import HomePage from "./Pages/HomePage";
 import ListSubheader from '@mui/material/ListSubheader';
-import FloorsPage from "./Pages/FloorsPage";
-import MonitorHeartOutlinedIcon from '@mui/icons-material/MonitorHeartOutlined';
+import FloorsPage from "./Pages/EntityManagement/FloorsPage";
 import CurrentUserDialog from "./Components/Dialogs/CurrentUserDialog";
 import Fade from '@mui/material/Fade';
-import FlatsPage from "./Pages/FlatsPage";
+import FlatsPage from "./Pages/EntityManagement/FlatsPage";
 import MeetingRoomOutlinedIcon from '@mui/icons-material/MeetingRoomOutlined';
-import DevicesPage from "./Pages/DevicesPage";
+import DevicesPage from "./Pages/EntityManagement/DevicesPage";
 import MemoryOutlinedIcon from '@mui/icons-material/MemoryOutlined';
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
-import UsersPage from "./Pages/UsersPage";
+import UsersPage from "./Pages/EntityManagement/UsersPage";
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import TelemetryPage from "./Pages/TelemetryPage";
+import TroubleshootOutlinedIcon from '@mui/icons-material/TroubleshootOutlined';
+import TelemetryDetailPage from "./Pages/TelemetryDetailPage";
+import HealthinessPage from "./Pages/HealthinessPage";
+import HealthinessDetailPage from "./Pages/HealthinessDetailPage";
 
 const drawerWidth = 240;
 
@@ -65,14 +69,14 @@ const entityManagementItems = [
 
 const telemetryItems = [
     {
-        name: "Telemetry",
+        name: "Telemetry Data",
         icon: <TimelineOutlinedIcon/>,
-        link: "/",
+        link: "/telemetry",
     },
     {
         name: "Device Healthiness",
-        icon: <MonitorHeartOutlinedIcon/>,
-        link: "/",
+        icon: <TroubleshootOutlinedIcon/>,
+        link: "/healthiness",
     },
 
 ]
@@ -142,7 +146,7 @@ export default function UIContainer() {
             <Divider/>
             <List subheader={
                 <ListSubheader component="div">
-                    Real Time Data
+                    Real-time Monitoring
                 </ListSubheader>
             }>
                 {telemetryItems.map((option) => (
@@ -268,6 +272,18 @@ export default function UIContainer() {
                                                               createErrorSnackBar={createErrorSnackBar}/>}/>
                         <Route path="" element={<UsersPage setShowLoading={setShowLoading}
                                                            createErrorSnackBar={createErrorSnackBar}/>}/>
+                    </Route>
+                    <Route path="telemetry">
+                        <Route path="" element={<TelemetryPage setShowLoading={setShowLoading}
+                                                               createErrorSnackBar={createErrorSnackBar}/>}/>
+                        <Route path=":id" element={<TelemetryDetailPage setShowLoading={setShowLoading}
+                                                                        createErrorSnackBar={createErrorSnackBar}/>}/>
+                    </Route>
+                    <Route path="healthiness">
+                        <Route path="" element={<HealthinessPage setShowLoading={setShowLoading}
+                                                                 createErrorSnackBar={createErrorSnackBar}/>}/>
+                        <Route path=":id" element={<HealthinessDetailPage createErrorSnackBar={createErrorSnackBar}
+                                                                          setShowLoading={setShowLoading}/>}/>
                     </Route>
                 </Routes>
             </Box>

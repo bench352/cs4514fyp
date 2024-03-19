@@ -2,12 +2,14 @@ import asyncio
 from contextlib import asynccontextmanager
 
 import uvicorn
-from env import ServerConfig
 from fastapi import FastAPI, HTTPException
-from logic import rt_data_fetching
 from loguru import logger
+
+from env import ServerConfig
+from logic import rt_data_fetching
 from repository.telemetry import TelemetryRepository
 from router import historical, real_time
+from fastapi.middleware.cors import CORSMiddleware
 
 background_task: asyncio.Task | None = None
 server_config = ServerConfig()
@@ -15,8 +17,12 @@ server_config = ServerConfig()
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
+    global background_task
     await TelemetryRepository.init_connection_pool()
     logger.info("Connection pool initialized")
+    background_task = asyncio.create_task(
+        rt_data_fetching.fetch_data_in_background()
+    )
     yield
 
 
@@ -33,17 +39,22 @@ IoT sensors. It also provides a WebSocket endpoint to provide real-time sensor d
 app.include_router(historical.router)
 app.include_router(real_time.router)
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins="*",
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 @app.get("/probes/health")
 async def health():
     global background_task
     if background_task is None:
-        background_task = asyncio.create_task(
-            rt_data_fetching.fetch_data_in_background()
-        )
-        return {"status": "Background task is just started"}
+        return {"status": "Background task is starting up"}
     if background_task.done():
-        raise HTTPException(status_code=500, detail="Background task failed")
+        raise HTTPException(status_code=500, detail="Background task is done")
     try:
         if background_task.exception():
             raise HTTPException(status_code=500, detail="Background task failed")

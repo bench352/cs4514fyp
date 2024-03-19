@@ -12,7 +12,7 @@ resource "helm_release" "timescaledb" {
 
   set {
     name  = "replicaCount"
-    value = 3
+    value = 1
   }
 
   set {
