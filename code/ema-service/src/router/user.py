@@ -56,7 +56,7 @@ def delete_user(_id: uuid.UUID = Path(alias="id")) -> Response:
 
 
 @router.post(
-    "/users/{id}/flats", dependencies=[Depends(AuthorizationClient("users", "write"))]
+    "/{id}/flats", dependencies=[Depends(AuthorizationClient("users", "write"))]
 )
 def add_flat_to_user(
     user_flat: rest.UserFlat, _id: uuid.UUID = Path(alias="id")
@@ -66,7 +66,7 @@ def add_flat_to_user(
 
 
 @router.delete(
-    "/users/{id}/flats", dependencies=[Depends(AuthorizationClient("users", "write"))]
+    "/{id}/flats", dependencies=[Depends(AuthorizationClient("users", "write"))]
 )
 def remove_user_from_flat(_id: uuid.UUID = Path(alias="id")) -> Response:
     user_repo.remove_user_from_flat(_id)

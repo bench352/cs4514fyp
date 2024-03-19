@@ -64,3 +64,33 @@ jobs:
     secrets:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+  build-web-ui:
+    defaults:
+      run:
+        working-directory: ./code/web-ui
+    runs-on: ubuntu-22.04
+    env:
+      dockerfile_path: ./code/web-ui/Dockerfile
+      service_directory: ./code/web-ui
+      docker_image_name: bench352/cs4514-shms-web-ui
+      docker_image_tag: latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+      - run: npm install
+      - run: npm run build
+      - name: Build and Push Docker Image With Version
+        uses: docker/build-push-action@v3
+        with:
+          push: true
+          context: ${{ env.service_directory }}
+          file: ${{ env.dockerfile_path }}
+          tags: ${{ env.docker_image_name }}:${{ env.docker_image_tag }}

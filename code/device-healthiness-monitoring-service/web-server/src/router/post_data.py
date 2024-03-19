@@ -2,6 +2,7 @@ import asyncio
 import uuid
 
 from fastapi import APIRouter, Depends
+
 from logic.sub_manager import SubscriptionManager
 from schemas.rest import (
     AnomalyData,
@@ -34,5 +35,5 @@ async def post_anomaly_data(device_id: uuid.UUID, anomaly_data: AnomalyDataPaylo
             )
         ],
     )
-    json_data = client_format.model_dump_json()
+    json_data = client_format.model_dump_json(by_alias=True)
     await asyncio.create_task(sub_manager.broadcast(str(device_id), json_data))

@@ -70,11 +70,16 @@ class TelemetryRepository:
             async with conn.cursor() as cur:
                 await cur.execute(
                     f"""
-                    SELECT key, timestamp, value
-                    FROM telemetry
+                    SELECT t.key, t.timestamp, t.value
+                    FROM telemetry t
+                    INNER JOIN (
+                        SELECT telemetry.key, MAX(telemetry.timestamp) AS timestamp
+                        FROM telemetry
+                        WHERE device_id = '{device_id}'
+                        GROUP BY telemetry.key
+                    ) tm ON t.key = tm.key AND t.timestamp = tm.timestamp
                     WHERE device_id = '{device_id}'
                     ORDER BY key, timestamp DESC
-                    LIMIT 1
                     """
                 )
                 rows = await cur.fetchall()
