@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+      - deployment
 jobs:
   build-ema-service:
     uses: bench352/cs4514fyp/.github/workflows/reusable-docker-build.yml@main
@@ -60,6 +61,16 @@ jobs:
       dockerfile_path: ./code/device-healthiness-monitoring-service/web-server/Dockerfile
       service_directory: ./code/device-healthiness-monitoring-service/web-server
       docker_image_name: bench352/cs4514-device-healthiness-monitoring-service
+      docker_image_tag: latest
+    secrets:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+  build-demo-data:
+    uses: bench352/cs4514fyp/.github/workflows/reusable-docker-build.yml@main
+    with:
+      dockerfile_path: ./code/demo-data/Dockerfile
+      service_directory: ./code/demo-data
+      docker_image_name: bench352/cs4514-demo-data
       docker_image_tag: latest
     secrets:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}

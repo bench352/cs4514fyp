@@ -7,8 +7,8 @@ import router.anomaly_data
 import router.post_data
 import router.real_time
 import uvicorn
-from loguru import logger
 from fastapi.middleware.cors import CORSMiddleware
+from loguru import logger
 
 server_config = env.ServerConfig()
 

@@ -2,14 +2,13 @@ import asyncio
 from contextlib import asynccontextmanager
 
 import uvicorn
-from fastapi import FastAPI, HTTPException
-from loguru import logger
-
 from env import ServerConfig
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from logic import rt_data_fetching
+from loguru import logger
 from repository.telemetry import TelemetryRepository
 from router import historical, real_time
-from fastapi.middleware.cors import CORSMiddleware
 
 background_task: asyncio.Task | None = None
 server_config = ServerConfig()
@@ -20,9 +19,7 @@ async def lifespan(_: FastAPI):
     global background_task
     await TelemetryRepository.init_connection_pool()
     logger.info("Connection pool initialized")
-    background_task = asyncio.create_task(
-        rt_data_fetching.fetch_data_in_background()
-    )
+    background_task = asyncio.create_task(rt_data_fetching.fetch_data_in_background())
     yield
 
 

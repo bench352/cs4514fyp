@@ -1,14 +1,14 @@
 from contextlib import asynccontextmanager
 
 import env
-import router.floor
-import router.flat
-import router.device
-import router.user
 import router.auth
-from fastapi.middleware.cors import CORSMiddleware
+import router.device
+import router.flat
+import router.floor
+import router.user
 import uvicorn
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from repository import init_db
 
 
@@ -42,6 +42,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 @app.get("/probes/health")
 async def health():

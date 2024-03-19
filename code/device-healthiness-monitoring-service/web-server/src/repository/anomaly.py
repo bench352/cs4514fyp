@@ -2,11 +2,10 @@ import uuid
 from collections import defaultdict, deque
 from datetime import datetime
 
+import env
 from fastapi.exceptions import HTTPException
 from loguru import logger
 from psycopg_pool import AsyncConnectionPool
-
-import env
 from schemas.rest import AnomalyData, AnomalyDataPoint, AnomalyKeyValues
 
 
@@ -63,10 +62,10 @@ class AnomalyRepository:
                 )
 
     async def get_historical_data(
-            self,
-            device_id: uuid.UUID,
-            from_ts: datetime,
-            to_ts: datetime,
+        self,
+        device_id: uuid.UUID,
+        from_ts: datetime,
+        to_ts: datetime,
     ) -> AnomalyData:
         if self._pool is None:
             raise HTTPException(

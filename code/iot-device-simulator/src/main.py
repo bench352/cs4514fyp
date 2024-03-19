@@ -12,7 +12,7 @@ parser.add_argument(
     "--schedule",
     type=str,
     help="A JSON file containing the schedule of all telemetry key for a device",
-    default="/data/schedule.json",
+    default="./schedule.json",
 )
 parser.add_argument(
     "--device-id",

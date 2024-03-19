@@ -3,9 +3,8 @@ from typing import Annotated
 from fastapi import APIRouter, Depends
 from fastapi.responses import Response
 from fastapi.security import OAuth2PasswordRequestForm
-from repository.user import UserRepository
-
 from logic import authenticate
+from repository.user import UserRepository
 from schemas import internal, rest
 
 router = APIRouter(prefix="/auth", tags=["authenticate"])
@@ -14,16 +13,16 @@ user_repo = UserRepository()
 
 @router.post("/login")
 def login(
-        form_data: Annotated[OAuth2PasswordRequestForm, Depends()]
+    form_data: Annotated[OAuth2PasswordRequestForm, Depends()]
 ) -> rest.TokenResponse:
     return authenticate.login(form_data.username, form_data.password)
 
 
 @router.get("/me")
 def read_user(
-        user_detail: Annotated[
-            internal.DecodedUserDetail, Depends(authenticate.authenticate_user)
-        ]
+    user_detail: Annotated[
+        internal.DecodedUserDetail, Depends(authenticate.authenticate_user)
+    ]
 ) -> rest.User:
     internal_user = user_repo.read_by_username(user_detail.username)
 
@@ -36,16 +35,18 @@ def read_user(
             id=internal_user.flat.id,
             name=internal_user.flat.name,
             floor_id=internal_user.flat.floor_id,
-        ) if internal_user.flat is not None else None,
+        )
+        if internal_user.flat is not None
+        else None,
     )
 
 
 @router.put("/password")
 def update_password(
-        user_detail: Annotated[
-            internal.DecodedUserDetail, Depends(authenticate.authenticate_user)
-        ],
-        update_payload: rest.PasswordUpdate,
+    user_detail: Annotated[
+        internal.DecodedUserDetail, Depends(authenticate.authenticate_user)
+    ],
+    update_payload: rest.PasswordUpdate,
 ) -> Response:
     authenticate.update_password(
         user_detail.username,
