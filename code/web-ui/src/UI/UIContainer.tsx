@@ -2,6 +2,7 @@
 // Customized for the purpose of the project
 
 import * as React from 'react';
+import {useEffect, useState} from 'react';
 import AppBar from '@mui/material/AppBar';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
@@ -35,6 +36,7 @@ import MeetingRoomOutlinedIcon from '@mui/icons-material/MeetingRoomOutlined';
 import DevicesPage from "./Pages/EntityManagement/DevicesPage";
 import MemoryOutlinedIcon from '@mui/icons-material/MemoryOutlined';
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
+import CodeOutlinedIcon from '@mui/icons-material/CodeOutlined';
 import UsersPage from "./Pages/EntityManagement/UsersPage";
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import TelemetryPage from "./Pages/TelemetryPage";
@@ -42,8 +44,13 @@ import TroubleshootOutlinedIcon from '@mui/icons-material/TroubleshootOutlined';
 import TelemetryDetailPage from "./Pages/TelemetryDetailPage";
 import HealthinessPage from "./Pages/HealthinessPage";
 import HealthinessDetailPage from "./Pages/HealthinessDetailPage";
+import {UserDetail} from "../Schemas/ema";
+import Auth from "../Repository/ema/auth";
+import {useAppSelector} from "../hooks";
+import APIDocsPage from "./Pages/APIDocsPage";
 
 const drawerWidth = 240;
+const emaService = new Auth();
 
 const entityManagementItems = [
     {
@@ -83,12 +90,27 @@ const telemetryItems = [
 
 export default function UIContainer() {
     const navigate = useNavigate();
+    const token = useAppSelector((state) => state.auth.token);
     const [mobileOpen, setMobileOpen] = React.useState(false);
     const [isClosing, setIsClosing] = React.useState(false);
     const [showLoading, setShowLoading] = React.useState(false);
     const [snackBarMessage, setSnackBarMessage] = React.useState("");
     const [showSnackBar, setShowSnackBar] = React.useState(false);
     const [showCurrentUserDialog, setShowCurrentUserDialog] = React.useState(false);
+    const [userDetail, setUserDetail] = useState(null as UserDetail | null);
+    const loadUser = async () => {
+        try {
+            setShowLoading(true);
+            let currentUser = await emaService.getUserProfile(token);
+            setUserDetail(currentUser);
+        } catch (e) {
+            if (e instanceof Error) {
+                createErrorSnackBar(e.message);
+            }
+        } finally {
+            setShowLoading(false);
+        }
+    }
     const createErrorSnackBar = (message: string) => {
         setSnackBarMessage(message);
         setShowSnackBar(true);
@@ -125,25 +147,29 @@ export default function UIContainer() {
                 </ListItem>
             </List>
             <Divider/>
-            <List subheader={
-                <ListSubheader component="div">
-                    Entity Management
-                </ListSubheader>
-            }>
-                {entityManagementItems.map((option) => (
-                    <ListItem key={option.name} disablePadding>
-                        <ListItemButton onClick={() => {
-                            navigate(option.link)
-                        }}>
-                            <ListItemIcon>
-                                {option.icon}
-                            </ListItemIcon>
-                            <ListItemText primary={option.name}/>
-                        </ListItemButton>
-                    </ListItem>
-                ))}
-            </List>
-            <Divider/>
+            {userDetail?.role === "LANDLORD" ?
+                (<>
+                    <List subheader={
+                        <ListSubheader component="div">
+                            Entity Management
+                        </ListSubheader>
+                    }>
+                        {entityManagementItems.map((option) => (
+                            <ListItem key={option.name} disablePadding>
+                                <ListItemButton onClick={() => {
+                                    navigate(option.link)
+                                }}>
+                                    <ListItemIcon>
+                                        {option.icon}
+                                    </ListItemIcon>
+                                    <ListItemText primary={option.name}/>
+                                </ListItemButton>
+                            </ListItem>
+                        ))}
+                    </List>
+                    <Divider/>
+                </>)
+                : ""}
             <List subheader={
                 <ListSubheader component="div">
                     Real-time Monitoring
@@ -174,10 +200,22 @@ export default function UIContainer() {
                         <ListItemText primary="Your Account"/>
                     </ListItemButton>
                 </ListItem>
+                <ListItem disablePadding>
+                    <ListItemButton onClick={() => {
+                        navigate("/apidocs");
+                    }}>
+                        <ListItemIcon>
+                            <CodeOutlinedIcon/>,
+                        </ListItemIcon>
+                        <ListItemText primary="API Docs"/>
+                    </ListItemButton>
+                </ListItem>
             </List>
         </div>
     );
-
+    useEffect(() => {
+        loadUser();
+    }, []);
     return (
         <Box sx={{display: 'flex'}}>
             <Snackbar open={showSnackBar} autoHideDuration={6000} onClose={() => setShowSnackBar(false)}>
@@ -246,7 +284,7 @@ export default function UIContainer() {
             >
                 <Toolbar/>
                 <Routes>
-                    <Route index path="/" element={<HomePage/>}/>
+                    <Route index path="/" element={<HomePage userDetail={userDetail}/>}/>
                     <Route path="floors">
                         <Route path=":id"
                                element={<FloorsPage setShowLoading={setShowLoading}
@@ -285,6 +323,7 @@ export default function UIContainer() {
                         <Route path=":id" element={<HealthinessDetailPage createErrorSnackBar={createErrorSnackBar}
                                                                           setShowLoading={setShowLoading}/>}/>
                     </Route>
+                    <Route path="apidocs" element={<APIDocsPage/>}/>
                 </Routes>
             </Box>
             <Snackbar
@@ -310,7 +349,7 @@ export default function UIContainer() {
 
             </Snackbar>
             <CurrentUserDialog setShowDialog={setShowCurrentUserDialog} createErrorSnackBar={createErrorSnackBar}
-                               setShowLoading={setShowLoading} open={showCurrentUserDialog}/>
+                               setShowLoading={setShowLoading} open={showCurrentUserDialog} userDetail={userDetail}/>
         </Box>
     );
 }

@@ -138,7 +138,7 @@ export default function UpdateDeviceDialog(props: AssetDialogProps) {
                             }}
                             label="Flat"
                         >
-                            {flats.map(flat => <MenuItem value={flat.id}>{flat.name}</MenuItem>)}
+                            {flats.map(flat => <MenuItem key={flat.id} value={flat.id}>{flat.name}</MenuItem>)}
                         </Select>
                     </FormControl>
                 </Stack>

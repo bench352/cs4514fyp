@@ -83,7 +83,7 @@ export default function AddFlatDialog(props: AddAssetDialogProps) {
                             }}
                             label="Floor"
                         >
-                            {floors.map(floor => <MenuItem value={floor.id}>{floor.name}</MenuItem>)}
+                            {floors.map(floor => <MenuItem key={floor.id} value={floor.id}>{floor.name}</MenuItem>)}
                         </Select>
                     </FormControl>
                 </Stack>

@@ -1,7 +1,6 @@
-import Auth from "../../../Repository/ema/auth";
 import {AddAssetDialogProps} from "../../Pages/BaseProps";
-import {useAppDispatch, useAppSelector} from "../../../hooks";
-import {UserProfile} from "../../../Schemas/ema";
+import {useAppDispatch} from "../../../hooks";
+import {UserDetail} from "../../../Schemas/ema";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
@@ -12,7 +11,7 @@ import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 import WorkspacePremiumOutlinedIcon from '@mui/icons-material/WorkspacePremiumOutlined';
 import Dialog from "@mui/material/Dialog";
 import Avatar from '@mui/material/Avatar';
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import {useNavigate} from "react-router-dom";
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
@@ -25,35 +24,20 @@ import ListItemText from '@mui/material/ListItemText';
 import KeyOutlinedIcon from '@mui/icons-material/KeyOutlined';
 import ChangePasswordDialog from "./ChangePasswordDialog";
 
-const emaService = new Auth();
+interface CurrentUserDialogProps extends AddAssetDialogProps {
+    userDetail: UserDetail | null;
+}
 
-
-export default function CurrentUserDialog(props: AddAssetDialogProps) {
+export default function CurrentUserDialog(props: CurrentUserDialogProps) {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
-    const token = useAppSelector((state) => state.auth.token);
-    const [userProfile, setUserProfile] = useState(null as UserProfile | null);
+
     const [showChangePasswordDialog, setShowChangePasswordDialog] = useState(false);
-    const loadUser = async () => {
-        try {
-            props.setShowLoading(true);
-            let currentUser = await emaService.getUserProfile(token);
-            setUserProfile(currentUser);
-        } catch (e) {
-            if (e instanceof Error) {
-                props.createErrorSnackBar(e.message);
-            }
-        } finally {
-            props.setShowLoading(false);
-        }
-    }
+
     const logout = async () => {
         dispatch({type: 'auth/logout'});
         navigate("/login");
     }
-    useEffect(() => {
-        loadUser();
-    }, []);
     return (
         <Dialog open={props.open} fullWidth maxWidth="xs">
             <DialogTitle>
@@ -73,10 +57,10 @@ export default function CurrentUserDialog(props: AddAssetDialogProps) {
                         spacing={0}
                     >
                         <Typography variant="body1" component="div" sx={{fontWeight: "bold"}}>
-                            {userProfile?.full_name}
+                            {props.userDetail?.full_name}
                         </Typography>
                         <Typography variant="caption" component="div">
-                            @{userProfile?.username}
+                            @{props.userDetail?.username}
                         </Typography>
                     </Stack>
                 </Stack>
@@ -88,7 +72,7 @@ export default function CurrentUserDialog(props: AddAssetDialogProps) {
                         <ListItemIcon>
                             <WorkspacePremiumOutlinedIcon/>
                         </ListItemIcon>
-                        <ListItemText primary="Role" secondary={userProfile?.role}/>
+                        <ListItemText primary="Role" secondary={props.userDetail?.role}/>
                     </ListItem>
                     <ListItem disablePadding>
                         <ListItemButton disableGutters={true} onClick={() => {

@@ -6,6 +6,7 @@ import Typography from "@mui/material/Typography";
 import Chip from "@mui/material/Chip";
 import {DeviceRepresentation} from "../../Pages/EntityManagement/DevicesPage";
 import MemoryOutlinedIcon from '@mui/icons-material/MemoryOutlined';
+import Container from "@mui/material/Container";
 
 
 export default function DeviceCard(props: { device: DeviceRepresentation }) {

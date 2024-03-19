@@ -1,6 +1,6 @@
 import {env} from "../../env";
 import {AuthenticationError} from "../../UI/exceptions";
-import {UserProfile} from "../../Schemas/ema";
+import {UserDetail} from "../../Schemas/ema";
 
 export default class Auth {
     async login(username: string, password: string): Promise<string> {
@@ -20,7 +20,7 @@ export default class Auth {
         return (await response.json())["access_token"]
     }
 
-    async getUserProfile(token: string): Promise<UserProfile> {
+    async getUserProfile(token: string): Promise<UserDetail> {
         const response = await fetch(env.REACT_APP_EMA_SERVICE_URL + "/auth/me", {
             method: "GET",
             headers: {

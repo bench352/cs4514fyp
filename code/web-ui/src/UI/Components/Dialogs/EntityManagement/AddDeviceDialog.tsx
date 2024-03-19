@@ -110,7 +110,7 @@ export default function AddDeviceDialog(props: AddAssetDialogProps) {
                             }}
                             label="Flat"
                         >
-                            {flats.map(flat => <MenuItem value={flat.id}>{flat.name}</MenuItem>)}
+                            {flats.map(flat => <MenuItem key={flat.id} value={flat.id}>{flat.name}</MenuItem>)}
                         </Select>
                     </FormControl>
                 </Stack>

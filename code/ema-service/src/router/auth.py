@@ -32,7 +32,11 @@ def read_user(
         username=internal_user.username,
         full_name=internal_user.full_name,
         role=internal_user.role,
-        flat=None
+        flat=rest.Flat(
+            id=internal_user.flat.id,
+            name=internal_user.flat.name,
+            floor_id=internal_user.flat.floor_id,
+        ) if internal_user.flat is not None else None,
     )
 
 
