@@ -23,8 +23,8 @@ async def lifespan(_: fastapi.FastAPI):
 app = fastapi.FastAPI(
     title="Device Healthiness Monitoring Service",
     description="""
-    Serve **anomaly detection results** from the database via REST APIs
-    and provide real-time anomaly detection results to clients via WebSocket.
+Serve **anomaly detection results** from the database via REST APIs
+and provide real-time anomaly detection results to clients via WebSocket.
     """,
     lifespan=lifespan,
     root_path=server_config.path_prefix,
