@@ -5,6 +5,7 @@ from datetime import datetime
 
 import aiomqtt
 import httpx
+import pytz
 from loguru import logger
 
 parser = argparse.ArgumentParser(description="IoT Device Simulator")
@@ -100,7 +101,7 @@ async def produce_in_real_time(key: str, values: list[dict]):
     ) as client:
         for value in values:
             await asyncio.sleep(value["timeDifference"])
-            now_ts = datetime.now().isoformat()
+            now_ts = datetime.now(tz=pytz.utc).isoformat()
             await client.publish(
                 args.mqtt_topic, generate_mqtt_payload(key, now_ts, value["value"])
             )

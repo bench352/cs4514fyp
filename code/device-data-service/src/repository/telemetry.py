@@ -1,6 +1,6 @@
 import uuid
 from collections import defaultdict, deque
-from datetime import datetime
+from datetime import datetime, timezone
 
 from env import TimescaleDBConfig
 from fastapi.exceptions import HTTPException
@@ -35,13 +35,15 @@ class TelemetryRepository:
             )
         async with self._pool.connection() as conn:
             async with conn.cursor() as cur:
+                from_ts_utc = from_ts.astimezone(timezone.utc)
+                to_ts_utc = to_ts.astimezone(timezone.utc)
                 await cur.execute(
                     f"""
                     SELECT key, timestamp, value
                     FROM telemetry
                     WHERE device_id = '{device_id}'
-                    AND timestamp >= '{from_ts}'
-                    AND timestamp <= '{to_ts}'
+                    AND timestamp >= '{from_ts_utc.isoformat()}'
+                    AND timestamp <= '{to_ts_utc.isoformat()}'
                     ORDER BY key, timestamp ASC
                     """
                 )
@@ -49,7 +51,9 @@ class TelemetryRepository:
                 key_values: dict[str, deque[TelemetryDataPoint]] = defaultdict(deque)
                 for row in rows:
                     key_values[row[0]].append(
-                        TelemetryDataPoint(timestamp=row[1], value=row[2])
+                        TelemetryDataPoint(
+                            timestamp=datetime.fromisoformat(str(row[1])), value=row[2]
+                        )
                     )
 
                 return TelemetryData(
