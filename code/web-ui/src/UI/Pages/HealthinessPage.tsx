@@ -70,20 +70,29 @@ export default function HealthinessPage(props: BasePageProps) {
       />
     ),
   };
+  const [websocketConnect, setWebsocketConnect] = useState(false);
   const [healthinessCardMap, setHealthinessCardMap] = useState(
     new Map<string, HealthinessCardEntry>(),
   );
   const { lastJsonMessage, readyState } = useWebSocket(
     `${env.REACT_APP_DEVICE_HEALTH_SERVICE_WS_URL}/real-time?token=` + token,
+    {
+      shouldReconnect: (closeEvent) => {
+        return true;
+      },
+    },
+    websocketConnect,
   );
   const updateHealthinessCardMap = (anomalyResult: Anomaly) => {
-    const newMap = new Map<string, HealthinessCardEntry>(healthinessCardMap);
-    anomalyResult.data.forEach((anomalyKey) => {
-      newMap
-        .get(anomalyResult.deviceId)
-        ?.latestValues.set(anomalyKey.key, anomalyKey.values[0].isAnomaly);
+    setHealthinessCardMap((prev) => {
+      anomalyResult.data.forEach((anomalyKey) => {
+        prev
+          .get(anomalyResult.deviceId)
+          ?.latestValues.set(anomalyKey.key, anomalyKey.values[0].isAnomaly);
+      });
+
+      return prev;
     });
-    setHealthinessCardMap(newMap);
   };
   const startStream = async () => {
     try {
@@ -99,6 +108,7 @@ export default function HealthinessPage(props: BasePageProps) {
         });
       });
       setHealthinessCardMap(newMap);
+      setWebsocketConnect(true);
     } catch (e) {
       if (e instanceof Error) {
         props.createErrorSnackBar(e.message);

@@ -69,23 +69,28 @@ export default function TelemetryPage(props: BasePageProps) {
       />
     ),
   };
-
+  const [websocketConnect, setWebsocketConnect] = useState(false);
   const token = useAppSelector((state) => state.auth.token);
   const [telemetryCardMap, setTelemetryCardMap] = useState(
     new Map<string, TelemetryCardEntry>(),
   );
   const { lastJsonMessage, readyState } = useWebSocket(
     env.REACT_APP_DEVICE_DATA_SERVICE_WS_URL + "/real-time?token=" + token,
+    {
+      shouldReconnect: (closeEvent) => true,
+      reconnectInterval: 3000,
+    },
+    websocketConnect,
   );
   const updateTelemetryCardMap = (telemetry: Telemetry) => {
-    const newMap = new Map<string, TelemetryCardEntry>(telemetryCardMap);
-    telemetry.data.forEach((telemetryKey) => {
-      newMap
-        .get(telemetry.deviceId)
-        ?.latestValues.set(telemetryKey.key, telemetryKey.values[0].value);
+    setTelemetryCardMap((prev) => {
+      telemetry.data.forEach((telemetryKey) => {
+        prev
+          .get(telemetry.deviceId)
+          ?.latestValues.set(telemetryKey.key, telemetryKey.values[0].value);
+      });
+      return prev;
     });
-
-    setTelemetryCardMap(newMap);
   };
   const startStream = async () => {
     try {
@@ -101,6 +106,7 @@ export default function TelemetryPage(props: BasePageProps) {
         });
       });
       setTelemetryCardMap(newMap);
+      setWebsocketConnect(true);
     } catch (e) {
       if (e instanceof Error) {
         props.createErrorSnackBar(e.message);
@@ -113,6 +119,7 @@ export default function TelemetryPage(props: BasePageProps) {
     startStream();
   }, []);
   useEffect(() => {
+    console.log(lastJsonMessage);
     lastJsonMessage && updateTelemetryCardMap(lastJsonMessage as Telemetry);
   }, [lastJsonMessage]);
   return (

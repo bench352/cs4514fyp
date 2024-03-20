@@ -41,6 +41,9 @@ class SubscriptionManager:
         logger.info("Websocket client unsubscribed")
 
     async def broadcast(self, _id: str, json_data: str):
+        tasks = []
         async with self._device_sub_lock[_id]:
             for subscriber in self._device_subscribers[_id]:
-                await subscriber.send_text(json_data)
+                tasks.append(subscriber.send_text(json_data))
+
+        await asyncio.gather(*tasks)
