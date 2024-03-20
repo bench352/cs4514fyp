@@ -1,0 +1,17 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: device-healthiness-monitoring-service-ingressroute
+  namespace: shms-microservices
+spec:
+  entryPoints:
+    - web
+  routes:
+    - kind: Rule
+      match: PathPrefix(`/dhms`)
+      services:
+        - name: device-healthiness-monitoring-service
+          port: 8000
+          namespace: shms-microservices
+      middlewares:
+        - name: device-healthiness-monitoring-service-stripprefix

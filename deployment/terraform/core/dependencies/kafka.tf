@@ -54,7 +54,7 @@ resource "helm_release" "kafka" {
 
   set {
     name  = "externalAccess.controller.service.externalIPs[0]"
-    value = "192.168.68.110"
+    value = var.external_ip
   }
 
   set {

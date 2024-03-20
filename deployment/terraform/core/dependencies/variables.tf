@@ -28,3 +28,7 @@ variable "kafka_password" {
 variable "kafka_topic" {
   description = "The Kafka topic to be initialized"
 }
+
+variable "external_ip" {
+  description = "The external IP of the Kafka cluster"
+}

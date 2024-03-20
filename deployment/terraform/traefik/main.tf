@@ -32,4 +32,9 @@ resource "helm_release" "traefik" {
     name  = "providers.kubernetesCRD.allowCrossNamespace"
     value = "true"
   }
+
+  set {
+    name  = "service.externalIPs[0]"
+    value = var.external_ip
+  }
 }

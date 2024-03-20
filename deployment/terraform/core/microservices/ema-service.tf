@@ -4,6 +4,11 @@ resource "helm_release" "ema_service" {
   namespace = kubernetes_namespace.shms_microservices.metadata[0].name
 
   set {
+    name  = "image.pullPolicy"
+    value = var.image_pull_policy
+  }
+
+  set {
     name  = "env.POSTGRES_HOST"
     value = var.timescaledb_host
   }

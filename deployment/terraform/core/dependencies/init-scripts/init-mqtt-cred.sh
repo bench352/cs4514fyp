@@ -3,5 +3,5 @@ kubectl exec -it deploy/mosquitto -n $NAMESPACE -- mosquitto_passwd -c /mosquitt
 $MQTT_PASSWORD
 $MQTT_PASSWORD
 EOF
-kubectl exec deploy/mosquitto -n $NAMESPACE -- sh -c "echo \"password_file /mosquitto/configinc/mosquitto.passwd\" >> /mosquitto/configinc/mosquitto.conf"
+kubectl exec deploy/mosquitto -n $NAMESPACE -- sh -c "echo -n \"password_file /mosquitto/configinc/mosquitto.passwd\" >> /mosquitto/configinc/mosquitto.conf"
 kubectl rollout restart deploy/mosquitto -n $NAMESPACE

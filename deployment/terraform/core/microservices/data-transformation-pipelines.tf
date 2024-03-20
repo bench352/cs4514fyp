@@ -4,6 +4,11 @@ resource "helm_release" "data_transformation_pipelines" {
   namespace = kubernetes_namespace.shms_microservices.metadata[0].name
 
   set {
+    name  = "image.pullPolicy"
+    value = var.image_pull_policy
+  }
+
+  set {
     name  = "env.MQTT_HOST"
     value = var.mqtt_host
   }
@@ -56,6 +61,11 @@ resource "helm_release" "data_transformation_pipelines" {
   set {
     name  = "env.KAFKA_CLIENT_ID"
     value = var.dt_pipeline_kafka_producer_id
+  }
+
+  set {
+    name  = "env.KAFKA_AUTH_ENABLED"
+    value = "true"
   }
 
   set {

@@ -28,6 +28,8 @@ module "dependencies" {
   kafka_username = var.kafka_username
   kafka_password = var.kafka_password
   kafka_topic    = var.kafka_topic
+
+  external_ip = var.external_ip
 }
 
 module "microservices" {
@@ -56,6 +58,14 @@ module "microservices" {
 
   kafka_topic = var.kafka_topic
   mqtt_topic  = "realtime-telemetry-data"
+
+  api_key = var.api_key
+
+  image_pull_policy = "Always"
+
+  external_ip = var.external_ip
+
+  enable_demo = var.enable_demo
 
   depends_on = [
     module.dependencies
