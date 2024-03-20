@@ -19,6 +19,7 @@ import { getDevice } from "../../Repository/ema/devices";
 import { useAppSelector } from "../../hooks";
 import { getHistoricalAnomalyDetectionResult } from "../../Repository/deviceHealthiness";
 import { getHistoricalData } from "../../Repository/data";
+import SearchOffOutlinedIcon from "@mui/icons-material/SearchOffOutlined";
 
 interface AnomalyValues {
   timestamp: string;
@@ -226,6 +227,22 @@ export default function HealthinessDetailPage(props: BasePageProps) {
             anomalyResultPresentation={result}
           />
         ))}
+        {resultPresentation.length === 0 ? (
+          <Stack
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+            spacing={1}
+            sx={{ margin: "10px" }}
+          >
+            <SearchOffOutlinedIcon sx={{ color: "#616161" }} />
+            <Typography variant="body1" noWrap color="#616161">
+              No anomaly detection results in the selected time range.
+            </Typography>
+          </Stack>
+        ) : (
+          ""
+        )}
       </Stack>
     </Container>
   );

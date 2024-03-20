@@ -19,6 +19,7 @@ import { useAppSelector } from "../../hooks";
 import { Device } from "../../Schemas/ema";
 import { getDevice } from "../../Repository/ema/devices";
 import { Telemetry, TelemetryKey } from "../../Schemas/data";
+import SearchOffOutlinedIcon from "@mui/icons-material/SearchOffOutlined";
 
 function TelemetryKeyChartPaper(props: { telemetryKeyData: TelemetryKey }) {
   return (
@@ -169,6 +170,22 @@ export default function TelemetryDetailPage(props: BasePageProps) {
             telemetryKeyData={telemetryKey}
           />
         ))}
+        {telemetryData?.data.length === 0 ? (
+          <Stack
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+            spacing={1}
+            sx={{ margin: "10px" }}
+          >
+            <SearchOffOutlinedIcon sx={{ color: "#616161" }} />
+            <Typography variant="body1" noWrap color="#616161">
+              No telemetry data in the selected time range.
+            </Typography>
+          </Stack>
+        ) : (
+          ""
+        )}
       </Stack>
     </Container>
   );
