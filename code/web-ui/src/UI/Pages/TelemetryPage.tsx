@@ -120,7 +120,6 @@ export default function TelemetryPage(props: BasePageProps) {
     startStream();
   }, []);
   useEffect(() => {
-    console.log(lastJsonMessage);
     lastJsonMessage && updateTelemetryCardMap(lastJsonMessage as Telemetry);
   }, [lastJsonMessage]);
   return (

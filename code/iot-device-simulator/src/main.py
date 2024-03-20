@@ -4,6 +4,7 @@ import json
 from datetime import datetime
 
 import aiomqtt
+import httpx
 from loguru import logger
 
 parser = argparse.ArgumentParser(description="IoT Device Simulator")
@@ -15,9 +16,9 @@ parser.add_argument(
     default="./schedule.json",
 )
 parser.add_argument(
-    "--device-id",
+    "--device-name",
     type=str,
-    help="The device id used to identify the device in the system",
+    help="The device name used to identify the device in the system",
 )
 parser.add_argument("--mqtt-host", type=str, help="The hostname of the MQTT broker")
 parser.add_argument("--mqtt-port", type=int, help="The port of the MQTT broker")
@@ -27,10 +28,56 @@ parser.add_argument(
     "--mqtt-topic", type=str, help="The MQTT topic to publish the telemetry data to"
 )
 parser.add_argument(
+    "--ema-service-url",
+    type=str,
+    help="The URL of the EMA service to get the device ID",
+)
+parser.add_argument(
+    "--ema-username", type=str, help="The username for logging in to the EMA service"
+)
+parser.add_argument(
+    "--ema-password", type=str, help="The password for logging in to the EMA service"
+)
+parser.add_argument(
     "mode", type=str, help="Which mode to run the simulator", choices=["rt", "ts"]
 )
 
 args = parser.parse_args()
+
+token_r = httpx.post(
+    f"{args.ema_service_url}/auth/login",
+    headers={"Content-Type": "application/x-www-form-urlencoded"},
+    data={"username": args.ema_username, "password": args.ema_password},
+)
+
+if token_r.is_error:
+    logger.error(token_r.text)
+    exit(1)
+
+token = token_r.json()["access_token"]
+
+device_r = httpx.get(
+    f"{args.ema_service_url}/devices", headers={"Authorization": f"Bearer {token}"}
+)
+
+if device_r.is_error:
+    logger.error(device_r.text)
+    exit(1)
+
+devices = device_r.json()
+
+device_id = ""
+
+for device in devices:
+    if device["name"] == args.device_name:
+        device_id = device["id"]
+        break
+
+if device_id == "":
+    logger.error("Device not found")
+    exit(1)
+
+logger.info("Found Device ID of device [{}]: {}", args.device_name, device_id)
 
 
 def load_json_schedule(schedule_file: str) -> dict:
@@ -40,7 +87,7 @@ def load_json_schedule(schedule_file: str) -> dict:
 
 def generate_mqtt_payload(telemetry_key, timestamp, value) -> str:
     return json.dumps(
-        {"time": timestamp, "deviceId": args.device_id, "data": {telemetry_key: value}}
+        {"time": timestamp, "deviceId": device_id, "data": {telemetry_key: value}}
     )
 
 

@@ -1,3 +1,4 @@
+import asyncio
 import uuid
 
 from fastapi import APIRouter, Depends, Path, WebSocket, WebSocketDisconnect, status
@@ -12,7 +13,6 @@ from loguru import logger
 from repository.ema_service import EMAServiceClient
 from repository.telemetry import TelemetryRepository
 from schemas.telemetry import TelemetryData
-import asyncio
 
 telemetry_repo = TelemetryRepository()
 emas_client = EMAServiceClient()
@@ -25,7 +25,7 @@ router = APIRouter(prefix="", tags=["Real Time"])
     "/devices/{device_id}/real-time", dependencies=[Depends(RestAuthorizationClient())]
 )
 async def list_real_time_data(
-        device_id: uuid.UUID = Path(),
+    device_id: uuid.UUID = Path(),
 ) -> TelemetryData:
     return await telemetry_repo.get_realtime_data(device_id)
 
@@ -35,7 +35,7 @@ async def list_real_time_data(
     dependencies=[Depends(WebsocketAuthorizationClient())],
 )
 async def subscribe_to_device_real_time_data(
-        websocket: WebSocket, device_id: str
+    websocket: WebSocket, device_id: str
 ) -> None:
     await websocket.accept()
     await sub_manager.subscribe(websocket, device_id)
