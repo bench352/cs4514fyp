@@ -44,3 +44,18 @@ variable "kafka_topic" {
   description = "The topic to buffer telemetry data"
   default     = "realtime-telemetry-data"
 }
+
+variable "api_key" {
+  description = "The API key for service to service communication"
+  sensitive   = true
+}
+
+variable "external_ip" {
+  description = "The external IP of the cluster"
+}
+
+variable "enable_demo" {
+  description = "Enable additional resources for demonstration purposes"
+  type        = bool
+  default     = false
+}

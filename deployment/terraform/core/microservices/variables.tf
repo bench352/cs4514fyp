@@ -93,7 +93,7 @@ variable "jwt_secret" {
 
 variable "jwt_expire_in_minutes" {
   description = "The time in minutes for which the JWT token is valid"
-  default     = 60
+  default     = 1440
 }
 
 variable "master_admin_username" {
@@ -109,4 +109,30 @@ variable "master_admin_password" {
 variable "ema_service_url" {
   description = "The URL of the EMA service"
   default     = "http://ema-service.shms-microservices:8000"
+}
+
+variable "api_key" {
+  description = "The API key for service to service authentication"
+  sensitive   = true
+}
+
+variable "dhm_service_url" {
+  description = "The URL of the Device Healthiness Monitoring Service Web Server"
+  default     = "http://device-healthiness-monitoring-service.shms-microservices:8000"
+}
+
+variable "image_pull_policy" {
+  description = "The image pull policy to use for the containers"
+  default     = "IfNotPresent"
+}
+
+variable "external_ip" {
+  description = "The external IP of the Kubernetes cluster"
+}
+
+
+variable "enable_demo" {
+  description = "Enable additional resources for demonstration purposes"
+  type        = bool
+  default     = false
 }

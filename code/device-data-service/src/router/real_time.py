@@ -1,3 +1,4 @@
+import asyncio
 import uuid
 
 from fastapi import APIRouter, Depends, Path, WebSocket, WebSocketDisconnect, status
@@ -57,11 +58,18 @@ async def subscribe_to_all_real_time_data(websocket: WebSocket, token: str) -> N
         )
     await websocket.accept()
     devices = await emas_client.list_device_ids(token)
+    tasks = []
     for device_id in devices:
-        await websocket.send_text(
-            (await telemetry_repo.get_realtime_data(device_id)).model_dump_json(by_alias=True)
+        tasks.append(
+            websocket.send_text(
+                (await telemetry_repo.get_realtime_data(device_id)).model_dump_json(
+                    by_alias=True
+                )
+            )
         )
-        await sub_manager.subscribe(websocket, device_id)
+        tasks.append(sub_manager.subscribe(websocket, device_id))
+    await asyncio.gather(*tasks)
+    logger.info("Websocket client subscribed to all devices")
     try:
         while True:
             await websocket.receive_text()

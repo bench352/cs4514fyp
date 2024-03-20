@@ -7,8 +7,8 @@ import router.anomaly_data
 import router.post_data
 import router.real_time
 import uvicorn
-from loguru import logger
 from fastapi.middleware.cors import CORSMiddleware
+from loguru import logger
 
 server_config = env.ServerConfig()
 
@@ -23,10 +23,11 @@ async def lifespan(_: fastapi.FastAPI):
 app = fastapi.FastAPI(
     title="Device Healthiness Monitoring Service",
     description="""
-    Serve **anomaly detection results** from the database via REST APIs
-    and provide real-time anomaly detection results to clients via WebSocket.
+Serve **anomaly detection results** from the database via REST APIs
+and provide real-time anomaly detection results to clients via WebSocket.
     """,
     lifespan=lifespan,
+    root_path=server_config.path_prefix,
 )
 
 app.include_router(router.post_data.router, prefix="/api/internal")
@@ -40,6 +41,12 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.get("/probes/health")
+async def health():
+    return {"status": "ok"}
+
 
 if __name__ == "__main__":
     uvicorn.run(

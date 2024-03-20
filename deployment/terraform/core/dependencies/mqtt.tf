@@ -62,4 +62,3 @@ resource "helm_release" "mqtt" {
     }
   }
 }
-

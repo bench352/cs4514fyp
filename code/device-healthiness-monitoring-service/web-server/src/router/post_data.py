@@ -2,7 +2,6 @@ import asyncio
 import uuid
 
 from fastapi import APIRouter, Depends
-
 from logic.sub_manager import SubscriptionManager
 from schemas.rest import (
     AnomalyData,

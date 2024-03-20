@@ -4,6 +4,11 @@ resource "helm_release" "device_data_service" {
   namespace = kubernetes_namespace.shms_microservices.metadata[0].name
 
   set {
+    name  = "image.pullPolicy"
+    value = var.image_pull_policy
+  }
+
+  set {
     name  = "env.TIMESCALEDB_HOST"
     value = var.timescaledb_host
   }
@@ -71,6 +76,11 @@ resource "helm_release" "device_data_service" {
   set {
     name  = "env.KAFKA_CLIENT_ID"
     value = var.device_data_svc_consumer_group
+  }
+
+  set {
+    name  = "env.KAFKA_AUTH_ENABLED"
+    value = "true"
   }
 
   set {

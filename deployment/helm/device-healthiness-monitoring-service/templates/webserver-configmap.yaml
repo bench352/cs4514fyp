@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "device-healthiness-monitoring-service.fullname" . }}-webserver-configmap
+data:
+  {{ range $key, $value := .Values.webServer.env }}
+  {{ $key }}: {{ $value | quote }}
+  {{ end }}

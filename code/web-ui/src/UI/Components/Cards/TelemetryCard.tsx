@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 
 export interface TelemetryCardEntry {
   id: string;
+  name: string;
   displayName: string;
   description: string;
   latestValues: Map<string, number>;
@@ -81,7 +82,7 @@ export default function TelemetryCard(props: {
             spacing={0}
           >
             <Typography variant="h6" component="h6" noWrap>
-              {props.telemetry.displayName}
+              {props.telemetry.displayName} ({props.telemetry.name})
             </Typography>
             <Typography variant="body1" noWrap>
               {props.telemetry.description}

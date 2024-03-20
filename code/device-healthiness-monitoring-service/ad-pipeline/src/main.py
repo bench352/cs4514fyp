@@ -16,18 +16,24 @@ timescaledb_settings = env.TimescaleDBSettings()
 webserver_settings = env.DeviceHealthMonitoringServiceSettings()
 model_manager = ad_model_manager.ADModelManager()
 
-kafka_consumer = Consumer(
-    {
-        "bootstrap.servers": f"{kafka_settings.kafka_host}:{kafka_settings.kafka_port}",
-        "group.id": kafka_settings.consumer_group,
-        # 'security.protocol': 'SASL_PLAINTEXT',
-        # 'sasl.mechanism': 'PLAIN',
-        # 'sasl.username': kafka_settings.kafka_username,
-        # 'sasl.password': kafka_settings.kafka_password,
-        "auto.offset.reset": "earliest",
-        "enable.auto.commit": "false",
-    }
-)
+kafka_args = {
+    "bootstrap.servers": f"{kafka_settings.kafka_host}:{kafka_settings.kafka_port}",
+    "group.id": kafka_settings.consumer_group,
+    "auto.offset.reset": "earliest",
+    "enable.auto.commit": "false",
+}
+
+if kafka_settings.kafka_auth_enabled:
+    kafka_args.update(
+        {
+            "security.protocol": "SASL_PLAINTEXT",
+            "sasl.mechanism": "PLAIN",
+            "sasl.username": kafka_settings.kafka_username,
+            "sasl.password": kafka_settings.kafka_password,
+        }
+    )
+
+kafka_consumer = Consumer(kafka_args)
 
 db_conn_pool = psycopg2.pool.SimpleConnectionPool(
     host=timescaledb_settings.timescaledb_host,
@@ -53,7 +59,6 @@ def _extract() -> Generator[str, None, None]:
             continue
         if message.error():
             raise KafkaException(message.error())
-        logger.debug(f"Received message: {message.value().decode('utf-8')}")
         yield message.value().decode("utf-8")
 
 
@@ -111,7 +116,6 @@ def _load_to_database(result: schemas.AnomalyDetectionResult):
                     result.is_anomaly,
                 ),
             )
-            logger.debug(f"Inserted result to database. Result: {result}")
             conn.commit()
     finally:
         db_conn_pool.putconn(conn)
@@ -124,7 +128,6 @@ def run_pipeline():
             continue
         try:
             result = _predict(transformed_data)
-            print(result)
             _load_to_web_server(result)
             _load_to_database(result)
         except Exception as e:

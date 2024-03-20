@@ -19,6 +19,7 @@ import { useAppSelector } from "../../hooks";
 import { Device } from "../../Schemas/ema";
 import { getDevice } from "../../Repository/ema/devices";
 import { Telemetry, TelemetryKey } from "../../Schemas/data";
+import SearchOffOutlinedIcon from "@mui/icons-material/SearchOffOutlined";
 
 function TelemetryKeyChartPaper(props: { telemetryKeyData: TelemetryKey }) {
   return (
@@ -28,7 +29,11 @@ function TelemetryKeyChartPaper(props: { telemetryKeyData: TelemetryKey }) {
       </Typography>
       <Line
         data={{
-          labels: props.telemetryKeyData.values.map((v) => v.timestamp),
+          labels: props.telemetryKeyData.values.map((v) =>
+            DateTime.fromISO(v.timestamp, { zone: "UTC" })
+              .toLocal()
+              .toLocaleString(DateTime.DATETIME_SHORT_WITH_SECONDS),
+          ),
           datasets: [
             {
               label: props.telemetryKeyData.key,
@@ -68,8 +73,8 @@ export default function TelemetryDetailPage(props: BasePageProps) {
         return navigate("/telemetry");
       }
       props.setShowLoading(true);
-      let dtObjFromTs = DateTime.fromISO(queryFromTs);
-      let dtObjToTs = DateTime.fromISO(queryToTs);
+      let dtObjFromTs = DateTime.fromISO(queryFromTs, { zone: "local" });
+      let dtObjToTs = DateTime.fromISO(queryToTs, { zone: "local" });
       let currentDevice = await getDevice(token, id);
       let result = await getHistoricalData(token, id, dtObjFromTs, dtObjToTs);
       setDevice(currentDevice);
@@ -169,6 +174,22 @@ export default function TelemetryDetailPage(props: BasePageProps) {
             telemetryKeyData={telemetryKey}
           />
         ))}
+        {telemetryData?.data.length === 0 ? (
+          <Stack
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+            spacing={1}
+            sx={{ margin: "10px" }}
+          >
+            <SearchOffOutlinedIcon sx={{ color: "#616161" }} />
+            <Typography variant="body1" noWrap color="#616161">
+              No telemetry data in the selected time range.
+            </Typography>
+          </Stack>
+        ) : (
+          ""
+        )}
       </Stack>
     </Container>
   );

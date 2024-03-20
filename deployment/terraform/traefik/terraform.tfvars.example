@@ -1,1 +1,2 @@
-config_context = "docker-desktop"
+config_context = "microk8s"
+external_ip    = "1.2.3.4"

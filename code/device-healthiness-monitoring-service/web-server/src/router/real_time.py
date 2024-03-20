@@ -1,6 +1,5 @@
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect, status
 from fastapi.exceptions import HTTPException, WebSocketException
-
 from logic.authorize import authenticate_user
 from logic.sub_manager import SubscriptionManager
 from repository.anomaly import AnomalyRepository
@@ -16,7 +15,7 @@ from loguru import logger
 
 @router.websocket("/real-time")
 async def subscribe_to_real_time_anomaly_detection(
-        websocket: WebSocket, token: str
+    websocket: WebSocket, token: str
 ) -> None:
     try:
         authenticate_user(token)
@@ -28,7 +27,9 @@ async def subscribe_to_real_time_anomaly_detection(
     devices = await ema_client.list_device_ids(token)
     for device_id in devices:
         await websocket.send_text(
-            (await anomaly_repo.get_realtime_data(device_id)).model_dump_json(by_alias=True)
+            (await anomaly_repo.get_realtime_data(device_id)).model_dump_json(
+                by_alias=True
+            )
         )
         await sub_manager.subscribe(websocket, device_id)
     try:

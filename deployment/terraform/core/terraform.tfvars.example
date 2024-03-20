@@ -1,12 +1,16 @@
-config_context       = "docker-desktop"
+config_context       = "microk8s"
 mqtt_username        = "admin"
-mqtt_password        = "password"
-timescaledb_password = "password"
+mqtt_password        = "mqtt_password"
+timescaledb_password = "tsdb_password"
+kafka_username       = "admin"
+kafka_password       = "kafka_password"
 
 master_admin_username = "admin"
-master_admin_password = "AdminPassword"
-
-kafka_username = "admin"
-kafka_password = "password"
+master_admin_password = "password"
 
 jwt_secret = "totally-secure-jwt-secret"
+api_key    = "totally-secure-api-key"
+
+external_ip = "172.27.54.240"
+
+enable_demo = true

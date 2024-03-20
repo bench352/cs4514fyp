@@ -19,6 +19,7 @@ import { getDevice } from "../../Repository/ema/devices";
 import { useAppSelector } from "../../hooks";
 import { getHistoricalAnomalyDetectionResult } from "../../Repository/deviceHealthiness";
 import { getHistoricalData } from "../../Repository/data";
+import SearchOffOutlinedIcon from "@mui/icons-material/SearchOffOutlined";
 
 interface AnomalyValues {
   timestamp: string;
@@ -42,8 +43,10 @@ function AnomalyKeyChartPaper(props: {
       <Chart
         type="scatter"
         data={{
-          labels: props.anomalyResultPresentation.values.map(
-            (v) => v.timestamp,
+          labels: props.anomalyResultPresentation.values.map((v) =>
+            DateTime.fromISO(v.timestamp, { zone: "UTC" })
+              .toLocal()
+              .toLocaleString(DateTime.DATETIME_SHORT_WITH_SECONDS),
           ),
           datasets: [
             {
@@ -90,8 +93,8 @@ export default function HealthinessDetailPage(props: BasePageProps) {
         return navigate("/healthiness");
       }
       props.setShowLoading(true);
-      let dtObjFromTs = DateTime.fromISO(queryFromTs);
-      let dtObjToTs = DateTime.fromISO(queryToTs);
+      let dtObjFromTs = DateTime.fromISO(queryFromTs, { zone: "local" });
+      let dtObjToTs = DateTime.fromISO(queryToTs, { zone: "local" });
       let currentDevice = await getDevice(token, id);
       let telemetryResult = await getHistoricalData(
         token,
@@ -226,6 +229,22 @@ export default function HealthinessDetailPage(props: BasePageProps) {
             anomalyResultPresentation={result}
           />
         ))}
+        {resultPresentation.length === 0 ? (
+          <Stack
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+            spacing={1}
+            sx={{ margin: "10px" }}
+          >
+            <SearchOffOutlinedIcon sx={{ color: "#616161" }} />
+            <Typography variant="body1" noWrap color="#616161">
+              No anomaly detection results in the selected time range.
+            </Typography>
+          </Stack>
+        ) : (
+          ""
+        )}
       </Stack>
     </Container>
   );

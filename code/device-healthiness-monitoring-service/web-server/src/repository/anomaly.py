@@ -1,12 +1,11 @@
 import uuid
 from collections import defaultdict, deque
-from datetime import datetime
+from datetime import datetime, timezone
 
+import env
 from fastapi.exceptions import HTTPException
 from loguru import logger
 from psycopg_pool import AsyncConnectionPool
-
-import env
 from schemas.rest import AnomalyData, AnomalyDataPoint, AnomalyKeyValues
 
 
@@ -63,10 +62,10 @@ class AnomalyRepository:
                 )
 
     async def get_historical_data(
-            self,
-            device_id: uuid.UUID,
-            from_ts: datetime,
-            to_ts: datetime,
+        self,
+        device_id: uuid.UUID,
+        from_ts: datetime,
+        to_ts: datetime,
     ) -> AnomalyData:
         if self._pool is None:
             raise HTTPException(
@@ -75,13 +74,15 @@ class AnomalyRepository:
             )
         async with self._pool.connection() as conn:
             async with conn.cursor() as cur:
+                from_ts_utc = from_ts.astimezone(timezone.utc)
+                to_ts_utc = to_ts.astimezone(timezone.utc)
                 await cur.execute(
                     f"""
                     SELECT key, timestamp, is_anomaly
                     FROM anomaly
                     WHERE device_id = '{device_id}'
-                    AND timestamp >= '{from_ts}'
-                    AND timestamp <= '{to_ts}'
+                    AND timestamp >= '{from_ts_utc.isoformat()}'
+                    AND timestamp <= '{to_ts_utc.isoformat()}'
                     ORDER BY key, timestamp ASC
                     """
                 )
@@ -89,7 +90,10 @@ class AnomalyRepository:
                 key_values: dict[str, deque[AnomalyDataPoint]] = defaultdict(deque)
                 for row in rows:
                     key_values[row[0]].append(
-                        AnomalyDataPoint(timestamp=row[1], is_anomaly=row[2])
+                        AnomalyDataPoint(
+                            timestamp=datetime.fromisoformat(str(row[1])),
+                            is_anomaly=row[2],
+                        )
                     )
                 return AnomalyData(
                     device_id=device_id,

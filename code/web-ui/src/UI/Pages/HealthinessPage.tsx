@@ -70,21 +70,33 @@ export default function HealthinessPage(props: BasePageProps) {
       />
     ),
   };
+  const [websocketConnect, setWebsocketConnect] = useState(false);
   const [healthinessCardMap, setHealthinessCardMap] = useState(
     new Map<string, HealthinessCardEntry>(),
   );
-  const { lastJsonMessage, readyState } = useWebSocket(
-    `${env.REACT_APP_DEVICE_HEALTH_SERVICE_WS_URL}/real-time?token=` + token,
-  );
   const updateHealthinessCardMap = (anomalyResult: Anomaly) => {
-    const newMap = new Map<string, HealthinessCardEntry>(healthinessCardMap);
-    anomalyResult.data.forEach((anomalyKey) => {
-      newMap
-        .get(anomalyResult.deviceId)
-        ?.latestValues.set(anomalyKey.key, anomalyKey.values[0].isAnomaly);
+    if (anomalyResult.data.length === 0) return;
+    setHealthinessCardMap((prev) => {
+      anomalyResult.data.forEach((anomalyKey) => {
+        prev
+          .get(anomalyResult.deviceId)
+          ?.latestValues.set(anomalyKey.key, anomalyKey.values[0].isAnomaly);
+      });
+
+      return prev;
     });
-    setHealthinessCardMap(newMap);
   };
+  const { readyState } = useWebSocket(
+    `${env.REACT_APP_DEVICE_HEALTH_SERVICE_WS_URL}/real-time?token=` + token,
+    {
+      shouldReconnect: (closeEvent) => true,
+      reconnectInterval: 3000,
+      onMessage: (event) => {
+        updateHealthinessCardMap(JSON.parse(event.data));
+      },
+    },
+    websocketConnect,
+  );
   const startStream = async () => {
     try {
       props.setShowLoading(true);
@@ -93,12 +105,14 @@ export default function HealthinessPage(props: BasePageProps) {
       devices.forEach((device) => {
         newMap.set(device.id as string, {
           id: device.id as string,
+          name: device.name as string,
           displayName: device.display_name as string,
           description: device.description as string,
           latestValues: new Map<string, boolean>(),
         });
       });
       setHealthinessCardMap(newMap);
+      setWebsocketConnect(true);
     } catch (e) {
       if (e instanceof Error) {
         props.createErrorSnackBar(e.message);
@@ -110,9 +124,6 @@ export default function HealthinessPage(props: BasePageProps) {
   useEffect(() => {
     startStream();
   }, []);
-  useEffect(() => {
-    lastJsonMessage && updateHealthinessCardMap(lastJsonMessage as Anomaly);
-  }, [lastJsonMessage]);
   return (
     <Container>
       <Stack
