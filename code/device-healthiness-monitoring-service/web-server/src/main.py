@@ -41,6 +41,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+@app.get("/probes/health")
+async def health():
+    return {"status": "ok"}
+
+
 if __name__ == "__main__":
     uvicorn.run(
         "main:app", host="0.0.0.0", port=server_config.port, reload=server_config.reload
