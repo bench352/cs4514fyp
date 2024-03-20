@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 
 export interface HealthinessCardEntry {
   id: string;
+  name: string;
   displayName: string;
   description: string;
   latestValues: Map<string, boolean>;
@@ -92,7 +93,7 @@ export default function HealthinessCard(props: {
             spacing={0}
           >
             <Typography variant="h6" component="h6" noWrap>
-              {props.healthiness.displayName}
+              {props.healthiness.displayName} ({props.healthiness.name})
             </Typography>
             <Typography variant="body1" noWrap>
               {props.healthiness.description}

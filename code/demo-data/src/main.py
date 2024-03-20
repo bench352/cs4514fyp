@@ -7,25 +7,25 @@ EMA_SERVICE_URL = os.environ.get("EMA_SERVICE_URL", "http://localhost:8000")
 MASTER_ADMIN_USERNAME = os.environ.get("MASTER_ADMIN_USERNAME", "admin")
 MASTER_ADMIN_PASSWORD = os.environ.get("MASTER_ADMIN_PASSWORD", "password")
 
-DEMO_FLOORS = [1, 2, 3, 4]
+DEMO_FLOORS = [1, 2, 3]
 
-DEMO_FLATS = ["01", "02", "03", "04", "05"]
+DEMO_FLATS = ["A", "B"]
 
 DEMO_DEVICES = [
     {
-        "namePrefix": "intelli-thermostat-bedroom",
-        "displayName": "Intelli Thermostat in Bedroom",
-        "description": "Smart thermostat in Bedroom",
+        "namePrefix": "thermostat-bedroom",
+        "displayName": "Thermostat in Bedroom",
+        "description": "Thermostat that measures the temperature in the bedroom.",
     },
     {
-        "namePrefix": "mint-energy-meter",
-        "displayName": "Mint Energy Meter",
-        "description": "Energy meter for the flat",
+        "namePrefix": "energy-meter",
+        "displayName": "Flat-wide Energy Meter",
+        "description": "Energy meter that measures the energy consumption of the flat.",
     },
     {
-        "namePrefix": "peters-hue-light-living-room",
-        "displayName": "Peters Multi-Color Smart Light",
-        "description": "Smart light in the living room",
+        "namePrefix": "smart-light-living-room",
+        "displayName": "Multi-Color Smart Light in Living Room",
+        "description": "Smart light in the living room with controllable color and brightness.",
     },
 ]
 
@@ -33,7 +33,7 @@ DEMO_RESIDENT_USERS = defaultdict(list)
 
 DEMO_RESIDENT_USERS.update(
     {
-        "Flat 101": [
+        "Flat 1A": [
             {
                 "username": "chriswong",
                 "full_name": "Chris Wong",
@@ -41,7 +41,7 @@ DEMO_RESIDENT_USERS.update(
                 "role": "RESIDENT",
             }
         ],
-        "Flat 102": [
+        "Flat 1B": [
             {
                 "username": "johnsmith",
                 "full_name": "John Smith",
@@ -53,9 +53,9 @@ DEMO_RESIDENT_USERS.update(
 )
 
 SIMULATOR_DEVICE = {
-    "name": "a-multifunctional-enviro-sensor",
-    "displayName": "A-Multifunctional Enviro Sensor (Simulated IoT Device)",
-    "description": "Simulated IoT device in the system",
+    "name": "a-simulated-sensor",
+    "displayName": "A Simulated IoT Device",
+    "description": "A IoT Device powered by IoT Device Simulator that produces sensor data based on real-world IoT datasets.",
 }
 
 token_r = httpx.post(
@@ -98,8 +98,8 @@ for floor in DEMO_FLOORS:
                 headers={"Authorization": f"Bearer {token}"},
                 json={
                     "name": f"{device['namePrefix']}-{floor}{flat}",
-                    "display_name": f"{device['displayName']} in Flat {floor}{flat}",
-                    "description": f"{device['description']} in Flat {floor}{flat}",
+                    "display_name": f"{device['displayName']}",
+                    "description": f"{device['description']}",
                     "flat_id": flat_id,
                 },
             )
@@ -110,7 +110,7 @@ for floor in DEMO_FLOORS:
             print(
                 f"Device [{device['namePrefix']}-{floor}{flat}] created, id={device_id}"
             )
-        if floor == 1 and flat == "01":
+        if floor == 1 and flat == "A":
             r_simulated_device = httpx.put(
                 f"{EMA_SERVICE_URL}/devices",
                 headers={"Authorization": f"Bearer {token}"},

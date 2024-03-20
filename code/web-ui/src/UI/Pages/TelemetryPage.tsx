@@ -100,6 +100,7 @@ export default function TelemetryPage(props: BasePageProps) {
       devices.forEach((device) => {
         newMap.set(device.id as string, {
           id: device.id as string,
+          name: device.name as string,
           displayName: device.display_name as string,
           description: device.description as string,
           latestValues: new Map<string, number>(),
