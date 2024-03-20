@@ -27,6 +27,7 @@ app = fastapi.FastAPI(
     and provide real-time anomaly detection results to clients via WebSocket.
     """,
     lifespan=lifespan,
+    root_path=server_config.path_prefix,
 )
 
 app.include_router(router.post_data.router, prefix="/api/internal")
