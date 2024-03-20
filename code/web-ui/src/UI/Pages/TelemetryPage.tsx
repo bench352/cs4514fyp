@@ -5,7 +5,7 @@ import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import TelemetryCard, {
   TelemetryCardEntry,
 } from "../Components/Cards/TelemetryCard";
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo } from "react";
 import { useAppSelector } from "../../hooks";
 import { getDevices } from "../../Repository/ema/devices";
 import { Telemetry } from "../../Schemas/data";
@@ -74,24 +74,29 @@ export default function TelemetryPage(props: BasePageProps) {
   const [telemetryCardMap, setTelemetryCardMap] = useState(
     new Map<string, TelemetryCardEntry>(),
   );
-  const { lastJsonMessage, readyState } = useWebSocket(
+  const updateTelemetryCardMap = (telemetry: Telemetry) => {
+    if (telemetry.data.length === 0) return;
+
+    setTelemetryCardMap((prevMap) => {
+      telemetry.data.forEach((telemetryKey) => {
+        prevMap
+          .get(telemetry.deviceId)
+          ?.latestValues.set(telemetryKey.key, telemetryKey.values[0].value);
+      });
+      return prevMap;
+    });
+  };
+  const { readyState } = useWebSocket(
     env.REACT_APP_DEVICE_DATA_SERVICE_WS_URL + "/real-time?token=" + token,
     {
       shouldReconnect: (closeEvent) => true,
       reconnectInterval: 3000,
+      onMessage: (event) => {
+        updateTelemetryCardMap(JSON.parse(event.data) as Telemetry);
+      },
     },
     websocketConnect,
   );
-  const updateTelemetryCardMap = (telemetry: Telemetry) => {
-    setTelemetryCardMap((prev) => {
-      telemetry.data.forEach((telemetryKey) => {
-        prev
-          .get(telemetry.deviceId)
-          ?.latestValues.set(telemetryKey.key, telemetryKey.values[0].value);
-      });
-      return prev;
-    });
-  };
   const startStream = async () => {
     try {
       props.setShowLoading(true);
@@ -119,9 +124,6 @@ export default function TelemetryPage(props: BasePageProps) {
   useEffect(() => {
     startStream();
   }, []);
-  useEffect(() => {
-    lastJsonMessage && updateTelemetryCardMap(lastJsonMessage as Telemetry);
-  }, [lastJsonMessage]);
   return (
     <Container>
       <Stack

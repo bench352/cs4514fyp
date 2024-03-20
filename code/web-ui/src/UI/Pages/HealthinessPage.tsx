@@ -74,16 +74,8 @@ export default function HealthinessPage(props: BasePageProps) {
   const [healthinessCardMap, setHealthinessCardMap] = useState(
     new Map<string, HealthinessCardEntry>(),
   );
-  const { lastJsonMessage, readyState } = useWebSocket(
-    `${env.REACT_APP_DEVICE_HEALTH_SERVICE_WS_URL}/real-time?token=` + token,
-    {
-      shouldReconnect: (closeEvent) => {
-        return true;
-      },
-    },
-    websocketConnect,
-  );
   const updateHealthinessCardMap = (anomalyResult: Anomaly) => {
+    if (anomalyResult.data.length === 0) return;
     setHealthinessCardMap((prev) => {
       anomalyResult.data.forEach((anomalyKey) => {
         prev
@@ -94,6 +86,17 @@ export default function HealthinessPage(props: BasePageProps) {
       return prev;
     });
   };
+  const { readyState } = useWebSocket(
+    `${env.REACT_APP_DEVICE_HEALTH_SERVICE_WS_URL}/real-time?token=` + token,
+    {
+      shouldReconnect: (closeEvent) => true,
+      reconnectInterval: 3000,
+      onMessage: (event) => {
+        updateHealthinessCardMap(JSON.parse(event.data));
+      },
+    },
+    websocketConnect,
+  );
   const startStream = async () => {
     try {
       props.setShowLoading(true);
@@ -121,9 +124,6 @@ export default function HealthinessPage(props: BasePageProps) {
   useEffect(() => {
     startStream();
   }, []);
-  useEffect(() => {
-    lastJsonMessage && updateHealthinessCardMap(lastJsonMessage as Anomaly);
-  }, [lastJsonMessage]);
   return (
     <Container>
       <Stack
