@@ -5,7 +5,7 @@ import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import TelemetryCard, {
   TelemetryCardEntry,
 } from "../Components/Cards/TelemetryCard";
-import { useEffect, useState, memo } from "react";
+import { useEffect, useState } from "react";
 import { useAppSelector } from "../../hooks";
 import { getDevices } from "../../Repository/ema/devices";
 import { Telemetry } from "../../Schemas/data";
