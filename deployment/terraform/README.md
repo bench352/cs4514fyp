@@ -95,6 +95,9 @@ Kubernetes cluster in your web browser. You will be greeted by the login page of
 Enter your username and password that is configured in the `terraform.tfvars` file (`master_admin_username`
 and `master_admin_password`) to log in. You can then start using different features of the system.
 
+If you have set `enable_demo` to `true` in the `terraform.tfvars` file, the fresh instance will come with demo data. You
+can learn more about the demo data [here](../../extra-info/DEMO-DATA.md).
+
 ## Clean Up
 
 Cleaning up the deployment is just as easy as deploying it. You can completely remove the Smart Home Management System

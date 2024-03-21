@@ -1,0 +1,229 @@
+services:
+  kafka:
+    image: bitnami/kafka:3.6
+    volumes:
+      - shms_kafka_data:/bitnami
+    environment:
+      - KAFKA_CFG_NODE_ID=0
+      - KAFKA_CFG_PROCESS_ROLES=controller,broker
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka:9093
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
+    restart: always
+  mqtt:
+    image: eclipse-mosquitto:2.0.18
+    volumes:
+      - ./mqtt-config:/mosquitto/config
+      - shms_mosquitto_data:/mosquitto/data
+    restart: always
+  timescaledb:
+    image: timescale/timescaledb-ha:pg14-latest
+    environment:
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - shms_timescaledb_data:/var/lib/postgresql/data
+    restart: always
+  ema-service:
+    image: bench352/cs4514-ema-service:latest
+    ports:
+      - "8000:8000"
+    environment:
+      - POSTGRES_HOST=timescaledb
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=smart_home_management_system
+      - PORT=8000
+      - JWT_SECRET=a_very_secure_jwt_secret
+      - JWT_EXPIRE_IN_MINUTES=1440
+      - MASTER_ADMIN_USERNAME=admin
+      - MASTER_ADMIN_PASSWORD=password
+    depends_on:
+      - timescaledb
+    restart: always
+    healthcheck:
+      test: curl --fail http://localhost:8000/probes/health || exit 1
+      interval: 30s
+      timeout: 10s
+  dt-pipeline-mqtt-to-kafka:
+    image: bench352/cs4514-data-transformation-pipelines:latest
+    environment:
+      - mqtt_host=mqtt
+      - mqtt_port=1883
+      - mqtt_username=admin
+      - mqtt_password=password
+      - mqtt_topic_filter=real-time-telemetry-data
+      - kafka_host=kafka
+      - kafka_port=9092
+      - kafka_username=na
+      - kafka_password=na
+      - kafka_topic=real-time-telemetry-data
+      - kafka_client_id=dt-pipeline-mqtt-to-kafka
+      - kafka_auth_enabled=false
+      - ema_service_url=http://ema-service:8000
+      - x_api_key=na
+    depends_on:
+      - kafka
+      - mqtt
+      - ema-service
+    command: poetry run python3 main.py mqtt_to_kafka
+    restart: always
+  dt-pipeline-kafka-to-timescaledb:
+    image: bench352/cs4514-data-transformation-pipelines:latest
+    environment:
+      - kafka_host=kafka
+      - kafka_port=9092
+      - kafka_username=na
+      - kafka_password=na
+      - kafka_topic=real-time-telemetry-data
+      - consumer_group=dt-pipeline-kafka-to-timescaledb
+      - kafka_auth_enabled=false
+      - timescaledb_host=timescaledb
+      - timescaledb_port=5432
+      - timescaledb_user=postgres
+      - timescaledb_password=password
+      - timescaledb_dbname=smart_home_management_system
+      - ema_service_url=http://ema-service:8000
+      - x_api_key=na
+    depends_on:
+      - kafka
+      - timescaledb
+      - ema-service
+    command: poetry run python3 main.py kafka_to_timescaledb
+    restart: always
+  device-data-service:
+    image: bench352/cs4514-device-data-service:latest
+    ports:
+      - 8001:8000
+    environment:
+      - timescaledb_host=timescaledb
+      - timescaledb_port=5432
+      - timescaledb_user=postgres
+      - timescaledb_password=password
+      - timescaledb_dbname=smart_home_management_system
+      - PORT=8000
+      - JWT_SECRET=a_very_secure_jwt_secret
+      - kafka_host=kafka
+      - kafka_port=9092
+      - kafka_username=na
+      - kafka_password=na
+      - kafka_topic=real-time-telemetry-data
+      - kafka_client_id=device-data-service
+      - kafka_auth_enabled=false
+      - ema_service_url=http://ema-service:8000
+    depends_on:
+      - kafka
+      - timescaledb
+      - ema-service
+    restart: always
+    healthcheck:
+      test: curl --fail http://localhost:8000/probes/health || exit 1
+      interval: 30s
+      timeout: 10s
+  dhms-web-server:
+    image: bench352/cs4514-device-healthiness-monitoring-service:latest
+    ports:
+      - 8002:8000
+    environment:
+      - port=8000
+      - timescaledb_host=timescaledb
+      - timescaledb_port=5432
+      - timescaledb_user=postgres
+      - timescaledb_password=password
+      - timescaledb_dbname=smart_home_management_system
+      - jwt_secret=a_very_secure_jwt_secret
+      - x_api_key=a_very_secure_x_api_key
+      - ema_service_url=http://ema-service:8000
+    depends_on:
+      - timescaledb
+      - ema-service
+    restart: always
+    healthcheck:
+      test: curl --fail http://localhost:8000/probes/health || exit 1
+      interval: 30s
+      timeout: 10s
+  dhms-ad-pipeline:
+    image: bench352/cs4514-ad-pipeline:latest
+    environment:
+      - kafka_host=kafka
+      - kafka_port=9092
+      - kafka_username=na
+      - kafka_password=na
+      - kafka_topic=real-time-telemetry-data
+      - consumer_group=dhms-ad-pipeline
+      - kafka_auth_enabled=false
+      - timescaledb_host=timescaledb
+      - timescaledb_port=5432
+      - timescaledb_user=postgres
+      - timescaledb_password=password
+      - timescaledb_dbname=smart_home_management_system
+      - service_url=http://dhms-web-server:8000
+      - x_api_key=a_very_secure_x_api_key
+    depends_on:
+      - kafka
+      - timescaledb
+      - dhms-web-server
+    restart: always
+  web-ui:
+    image: bench352/cs4514-shms-web-ui:latest
+    ports:
+      - 3000:3000
+    environment:
+      - REACT_APP_EMA_SERVICE_URL=http://localhost:8000
+      - REACT_APP_DEVICE_DATA_SERVICE_URL=http://localhost:8001
+      - REACT_APP_DEVICE_DATA_SERVICE_WS_URL=ws://localhost:8001
+      - REACT_APP_DEVICE_HEALTH_SERVICE_URL=http://localhost:8002
+      - REACT_APP_DEVICE_HEALTH_SERVICE_WS_URL=ws://localhost:8002
+    restart: always
+    depends_on:
+      - ema-service
+      - device-data-service
+      - dhms-web-server
+  demo-data:
+    image: bench352/cs4514-demo-data:latest
+    environment:
+      - EMA_SERVICE_URL=http://ema-service:8000
+      - MASTER_ADMIN_USERNAME=admin
+      - MASTER_ADMIN_PASSWORD=password
+    depends_on:
+      - ema-service
+    restart: on-failure
+  iot-device-simulator:
+    image: bench352/cs4514-iot-device-simulator:latest
+    command:
+      - poetry
+      - run
+      - python3
+      - main.py
+      - --device-name
+      - a-simulated-sensor
+      - --mqtt-host
+      - mqtt
+      - --mqtt-port
+      - "1883"
+      - --mqtt-username
+      - admin
+      - --mqtt-password
+      - password
+      - --mqtt-topic
+      - real-time-telemetry-data
+      - --ema-service-url
+      - http://ema-service:8000
+      - --ema-username
+      - admin
+      - --ema-password
+      - password
+      - rt
+    depends_on:
+      - ema-service
+      - mqtt
+    restart: on-failure
+volumes:
+  shms_kafka_data:
+    driver: local
+  shms_mosquitto_data:
+    driver: local
+  shms_timescaledb_data:
+    driver: local
