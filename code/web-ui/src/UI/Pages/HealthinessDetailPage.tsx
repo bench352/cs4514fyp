@@ -85,7 +85,7 @@ export default function HealthinessDetailPage(props: BasePageProps) {
     DateTime.now().minus({ minute: 30 }).toISO().slice(0, 16),
   );
   const [queryToTs, setQueryToTs] = useState(
-    DateTime.now().toISO().slice(0, 16),
+    DateTime.now().plus({ minute: 1 }).toISO().slice(0, 16),
   );
   const queryData = async () => {
     try {

@@ -1,12 +1,25 @@
-resource "kubernetes_job" "iot_device_simulator" {
+resource "kubernetes_deployment" "iot_device_simulator" {
   count = var.enable_demo ? 1 : 0
   metadata {
     name      = "iot-device-simulator"
     namespace = kubernetes_namespace.shms_microservices.metadata[0].name
+    labels = {
+      app = "iot-device-simulator"
+    }
   }
   spec {
+    replicas = 1
+    selector {
+      match_labels = {
+        app = "iot-device-simulator"
+      }
+    }
     template {
-      metadata {}
+      metadata {
+        labels = {
+          app = "iot-device-simulator"
+        }
+      }
       spec {
         container {
           name              = "iot-device-simulator"
@@ -41,6 +54,5 @@ resource "kubernetes_job" "iot_device_simulator" {
       }
     }
   }
-  wait_for_completion = false
   depends_on          = [helm_release.ema_service, helm_release.data_transformation_pipelines]
 }

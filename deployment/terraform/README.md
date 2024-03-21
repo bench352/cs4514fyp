@@ -16,6 +16,10 @@ software tools for carrying out this deployment method:
   using [Docker Desktop](https://docs.docker.com/desktop/kubernetes/) or [microk8s](https://microk8s.io/), or use a
   managed Kubernetes provider like [Amazon Elastic Kubernetes Service](https://aws.amazon.com/eks/)
   or [Google Kubernetes Engine](https://cloud.google.com/kubernetes-engine/).
+- [Bash](https://en.wikipedia.org/wiki/Bash_(Unix_shell)) terminal: This deployment uses shell scripts to automate some
+  of the provisioning tasks, so a bash terminal is required for the deployment. If you are using Windows, you can
+  use [Windows Subsystem for Linux (WSL)](https://learn.microsoft.com/en-us/windows/wsl/about) to go through the
+  Terraform deployment.
 
 If you have everything ready, you can start the deployment process by following the steps below.
 
@@ -94,6 +98,9 @@ Kubernetes cluster in your web browser. You will be greeted by the login page of
 
 Enter your username and password that is configured in the `terraform.tfvars` file (`master_admin_username`
 and `master_admin_password`) to log in. You can then start using different features of the system.
+
+If you have set `enable_demo` to `true` in the `terraform.tfvars` file, the fresh instance will come with demo data. You
+can learn more about the demo data [here](../../extra-info/DEMO-DATA.md).
 
 ## Clean Up
 
