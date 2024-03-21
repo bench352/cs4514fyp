@@ -13,11 +13,6 @@ resource "helm_release" "kafka" {
   }
 
   set {
-    name  = "broker.replicaCount"
-    value = 3
-  }
-
-  set {
     name  = "sasl.client.users[0]"
     value = var.kafka_username
   }
@@ -58,29 +53,13 @@ resource "helm_release" "kafka" {
   }
 
   set {
-    name  = "externalAccess.broker.service.type"
-    value = "NodePort"
-  }
-
-  dynamic "set" {
-    for_each = range(3)
-    content {
-      name  = "externalAccess.broker.service.nodePorts[${set.key}]"
-      value = 30093 + set.key
-    }
-  }
-
-  dynamic "set" {
-    for_each = range(3)
-    content {
-      name  = "externalAccess.broker.service.externalIPs[${set.key}]"
-      value = "192.168.68.110"
-    }
+    name  = "provisioning.enabled"
+    value = true
   }
 
   set {
-    name  = "provisioning.enabled"
-    value = true
+    name  = "provisioning.replicationFactor"
+    value = 1
   }
 
   set {
@@ -90,11 +69,21 @@ resource "helm_release" "kafka" {
 
   set {
     name  = "provisioning.topics[0].partitions"
-    value = 3
+    value = 1
   }
 
   set {
     name  = "provisioning.topics[0].replicationFactor"
     value = 1
+  }
+
+  set {
+    name  = "provisioning.topics[0].replicationFactor"
+    value = 1
+  }
+
+  set {
+    name  = "controller.extraConfig"
+    value = "offsets.topic.replication.factor=1\ntransaction.state.log.replication.factor=1"
   }
 }
