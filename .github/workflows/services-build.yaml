@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+      - deployment
 jobs:
   build-ema-service:
     uses: bench352/cs4514fyp/.github/workflows/reusable-docker-build.yml@main

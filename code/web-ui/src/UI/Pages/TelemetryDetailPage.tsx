@@ -65,7 +65,7 @@ export default function TelemetryDetailPage(props: BasePageProps) {
     DateTime.now().minus({ minute: 5 }).toISO().slice(0, 16),
   );
   const [queryToTs, setQueryToTs] = useState(
-    DateTime.now().toISO().slice(0, 16),
+    DateTime.now().plus({ minute: 1 }).toISO().slice(0, 16),
   );
   const queryData = async () => {
     try {
