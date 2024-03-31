@@ -61,7 +61,7 @@ module "microservices" {
 
   api_key = var.api_key
 
-  image_pull_policy = "Always"
+  image_pull_policy = "IfNotPresent"
 
   external_ip = var.external_ip
 
