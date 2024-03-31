@@ -1,7 +1,7 @@
-import json
 import uuid
 from typing import AsyncIterable
 
+import orjson
 import pendulum
 from aiokafka import AIOKafkaConsumer
 from env import KafkaToTimescaleDBSettings
@@ -45,7 +45,7 @@ class KafkaToTimescaleDBPipeline(BaseETLPipeline[str, str]):
 
     async def transform(self, extracted: str) -> timescaledb.EntriesForDatabase | None:
         try:
-            raw_payload_dict = json.loads(extracted)
+            raw_payload_dict = orjson.loads(extracted)
             kafka_payload = kafka.KafkaMessageForTelemetry(
                 timestamp=pendulum.parse(raw_payload_dict["timestamp"]),
                 device_id=uuid.UUID(raw_payload_dict["device_id"]),
@@ -58,7 +58,7 @@ class KafkaToTimescaleDBPipeline(BaseETLPipeline[str, str]):
                 key=kafka_payload.key,
                 value=kafka_payload.value,
             )
-        except json.JSONDecodeError:
+        except orjson.JSONDecodeError:
             logger.error("Received message is not a valid JSON: {}", extracted)
         except KeyError as e:
             logger.error("Received message is missing key: {}", e)

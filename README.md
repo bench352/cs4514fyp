@@ -26,7 +26,9 @@ Manage the entities in your apartment building in terms of floors, flats, device
 
 ### User Management
 
-You can invite other trusted users to join the system and manage entities in the building by creating a Landlord account for them. In addition, the residents can also access the system, but they only have read-only access to the devices under their flats.
+You can invite other trusted users to join the system and manage entities in the building by creating a Landlord account
+for them. In addition, the residents can also access the system, but they only have read-only access to the devices
+under their flats.
 
 ![](./readme-images/entity-management-user-detail.png)
 
@@ -46,7 +48,8 @@ Keep track of the telemetry data produced by all devices in real-time as well as
 
 ### Realtime Anomaly Detection
 
-Smart Home Management System monitors all telemetry data that goes through the system and uses Machine Learning to identify anomalies in real-time. The prediction result for all devices will be immediately visualized.
+Smart Home Management System monitors all telemetry data that goes through the system and uses Machine Learning to
+identify anomalies in real-time. The prediction result for all devices will be immediately visualized.
 
 ![](./readme-images/real-time-anomaly-detection.png)
 

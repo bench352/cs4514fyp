@@ -1,0 +1,65 @@
+[
+  {
+    "matchPrefix": "energy-meter",
+    "data": [
+      {
+        "key": "Current Watts",
+        "rangeFrom": 500,
+        "rangeTo": 2000,
+        "timeIntervalSeconds": 30,
+        "type": "random-continuous"
+      }
+    ]
+  },
+  {
+    "matchPrefix": "smart-light-living-room",
+    "data": [
+      {
+        "key": "Brightness",
+        "value": 100,
+        "type": "fixed"
+      },
+      {
+        "key": "Red",
+        "value": "255",
+        "type": "fixed"
+      },
+      {
+        "key": "Green",
+        "value": "255",
+        "type": "fixed"
+      },
+      {
+        "key": "Blue",
+        "value": "255",
+        "type": "fixed"
+      }
+    ]
+  },
+  {
+    "matchPrefix": "thermostat-bedroom",
+    "data": [
+      {
+        "key": "Temperature",
+        "rangeFrom": 26,
+        "rangeTo": 30,
+        "timeIntervalSeconds": 15,
+        "type": "random-continuous"
+      },
+      {
+        "key": "Humidity",
+        "rangeFrom": 70,
+        "rangeTo": 90,
+        "timeIntervalSeconds": 15,
+        "type": "random-continuous"
+      },
+      {
+        "key": "PM2.5",
+        "rangeFrom": 0,
+        "rangeTo": 15,
+        "timeIntervalSeconds": 15,
+        "type": "random-continuous"
+      }
+    ]
+  }
+]

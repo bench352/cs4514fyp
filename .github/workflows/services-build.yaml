@@ -74,6 +74,16 @@ jobs:
     secrets:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+  build-random-data-generator:
+    uses: bench352/cs4514fyp/.github/workflows/reusable-docker-build.yml@main
+    with:
+      dockerfile_path: ./code/random-data-generator/Dockerfile
+      service_directory: ./code/random-data-generator
+      docker_image_name: bench352/cs4514-random-data-generator
+      docker_image_tag: latest
+    secrets:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
   build-web-ui:
     defaults:
       run:
