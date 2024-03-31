@@ -5,7 +5,7 @@
       <sourceFolder url="file://$MODULE_DIR$/code/demo-data/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/code/device-healthiness-monitoring-service/web-server/src" isTestSource="false" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.10.12 WSL (Ubuntu)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Random Data Generator" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>

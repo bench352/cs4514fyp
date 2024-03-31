@@ -1,8 +1,8 @@
-import json
 import uuid
 from typing import AsyncIterable
 
 import aiomqtt
+import orjson
 import pendulum
 from aiokafka import AIOKafkaProducer
 from env import MQTTToKafkaSettings
@@ -47,14 +47,14 @@ class MQTTToKafkaPipeline(BaseETLPipeline[str, kafka.KafkaMessageForTelemetry]):
         }
         """
         try:
-            mqtt_payload = json.loads(extracted)
+            mqtt_payload = orjson.loads(extracted)
             return kafka.KafkaMessageForTelemetry(
                 timestamp=pendulum.parse(mqtt_payload["time"]),
                 device_id=uuid.UUID(mqtt_payload["deviceId"]),
                 key=list(mqtt_payload["data"].keys())[0],
                 value=list(mqtt_payload["data"].values())[0],
             )
-        except json.JSONDecodeError:
+        except orjson.JSONDecodeError:
             logger.error("Received message is not a valid JSON: {}", extracted)
         except ValidationError as e:
             logger.error("Invalid payload: {}", e)
@@ -69,7 +69,7 @@ class MQTTToKafkaPipeline(BaseETLPipeline[str, kafka.KafkaMessageForTelemetry]):
             raise RuntimeError("Kafka producer is not initialized")
         await self._kafka_producer.send_and_wait(
             topic=self._config.kafka_topic,
-            value=transformed.model_dump_json().encode("utf-8"),
+            value=orjson.dumps(transformed.model_dump(), option=orjson.OPT_NAIVE_UTC),
             key=transformed.device_id.bytes,
         )
 

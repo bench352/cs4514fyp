@@ -3,7 +3,7 @@ resource "kubernetes_deployment" "iot_device_simulator" {
   metadata {
     name      = "iot-device-simulator"
     namespace = kubernetes_namespace.shms_microservices.metadata[0].name
-    labels = {
+    labels    = {
       app = "iot-device-simulator"
     }
   }
@@ -54,5 +54,5 @@ resource "kubernetes_deployment" "iot_device_simulator" {
       }
     }
   }
-  depends_on          = [helm_release.ema_service, helm_release.data_transformation_pipelines]
+  depends_on = [helm_release.ema_service, helm_release.data_transformation_pipelines, kubernetes_job.demo_data]
 }
