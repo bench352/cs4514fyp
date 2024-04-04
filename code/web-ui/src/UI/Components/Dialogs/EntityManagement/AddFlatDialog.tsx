@@ -56,7 +56,7 @@ export default function AddFlatDialog(props: AddAssetDialogProps) {
   }, [props.open]);
   return (
     <Dialog open={props.open} fullWidth maxWidth="xs">
-      <DialogTitle>Add Floor</DialogTitle>
+      <DialogTitle>Add Flat</DialogTitle>
       <DialogContent>
         <Stack
           direction="column"
