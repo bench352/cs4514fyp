@@ -220,6 +220,22 @@ services:
       - ema-service
       - mqtt
     restart: on-failure
+  random-data-generator:
+    image: bench352/cs4514-random-data-generator:latest
+    environment:
+      - EMA_SERVICE_URL=http://ema-service:8000
+      - EMA_USERNAME=admin
+      - EMA_PASSWORD=password
+      - MQTT_HOST=mqtt
+      - MQTT_PORT=1883
+      - MQTT_USERNAME=admin
+      - MQTT_PASSWORD=password
+      - MQTT_TOPIC=real-time-telemetry-data
+    depends_on:
+      - ema-service
+      - mqtt
+      - demo-data
+    restart: always
 volumes:
   shms_kafka_data:
     driver: local

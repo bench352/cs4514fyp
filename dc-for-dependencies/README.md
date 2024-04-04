@@ -1,7 +1,7 @@
 # Docker Compose Files for Dependencies
 
 This directory contains the [Docker Compose](https://docs.docker.com/compose/) file for spinning up the necessary
-dependencies required by this system.
+dependencies required by this system. They are primary for development purposes.
 
 - `./timescaledb`: For spinning up an [TimescaleDB](https://www.timescale.com/) instance.
     - Username: `postgres` Password: `password`

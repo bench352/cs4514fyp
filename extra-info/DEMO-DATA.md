@@ -1,8 +1,6 @@
 # Demo Data for Smart Home Management System
 
-If you opt for the demo data during deployment, your fresh installation of the **Smart Home Management System** will
-come with a set of demo entities as well as additional user accounts to illustrate the potential use cases of this
-system.
+Demo data is created alongside the system to demonstrate the capability of the system without prior setup. If you opt for the demo data during deployment, your fresh installation of the **Smart Home Management System** will come with a set of demo entities as well as additional user accounts listed below.
 
 ## Included in the Demo
 
@@ -14,7 +12,7 @@ Here are the entities that are included in the demo:
 - `2/F`
 - `3/F`
 
-**2 Flats for each floor (`<floor-no>` indicates the floor number, e.g. `1`)**
+**2 Flats for each Floor (`<floor-no>` indicates the floor number, e.g. `1`)**
 
 - `Flat <floor-no>A`
 - `Flat <floor-no>B`
@@ -25,12 +23,13 @@ Here are the entities that are included in the demo:
 - Multi-Color Smart Light in Living Room (`smart-light-living-room-<flat-name>`)
 - Thermostat in Bedroom (`thermostat-bedroom-<flat-name>`)
 
-Note that all the devices mentioned above will not be simulated. You will not see any telemetry data for the devices
-mentioned above in the system.
+> The devices mentioned above are powered by the Random Data Generator, which produces random numbers for the sensor readings to make them look like they are working in the system. You will be able to see real-time telemetry data as well as anomaly detection results for those devices, but note that the anomaly detection result would not be accurate due to the unpredictable nature of random-generated data.
 
-> To demonstrate the real-time data visualization and anomaly detection capability of the system, a special device, "A
-> Simulated IoT Device" (`a-simulated-sensor`) is added to `Flat 1A`. This device will be powered by an IoT Device
-> Simulator using IoT sensor data adopted from the [AnoML-IoT](https://www.kaggle.com/datasets/hkayan/anomliot) dataset.
+**1 special Device for `Flat 1A`**
+
+- `a-simulated-sensor`
+
+> This device is powered by an IoT Device Simulator using IoT sensor data adopted from the [AnoML-IoT](https://www.kaggle.com/datasets/hkayan/anomliot) dataset to mimic the behavior of a real-world IoT device and demonstrate the capability of the system to perform anomaly detection.
 
 **2 Users (apart from the default `Master Admin` account)**
 

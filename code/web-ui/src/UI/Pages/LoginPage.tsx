@@ -36,7 +36,7 @@ function LoginCard() {
       showLoginButtonLoading(true);
       if (data.username === "" || data.password === "") {
         throw new Error(
-          "I don't have eyes, so I can't recognize you without your username and password :(",
+          "Please enter both username and password to login."
         );
       }
       const token = await emaService.login(data.username, data.password);
