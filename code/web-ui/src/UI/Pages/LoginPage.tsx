@@ -35,9 +35,7 @@ function LoginCard() {
     try {
       showLoginButtonLoading(true);
       if (data.username === "" || data.password === "") {
-        throw new Error(
-          "Please enter both username and password to login."
-        );
+        throw new Error("Please enter both username and password to login.");
       }
       const token = await emaService.login(data.username, data.password);
       dispatch({ type: "auth/login", payload: token });

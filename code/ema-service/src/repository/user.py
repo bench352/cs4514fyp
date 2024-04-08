@@ -113,9 +113,15 @@ class UserRepository:
 
     def delete(self, _id: uuid.UUID):
         with get_session() as session:
-            statement = delete(models.User).where(models.User.id == _id)
-            session.execute(statement)
-            session.commit()
+            try:
+                statement = delete(models.User).where(models.User.id == _id)
+                session.execute(statement)
+                session.commit()
+            except IntegrityError:
+                raise HTTPException(
+                    status_code=status.HTTP_409_CONFLICT,
+                    detail="To delete a user, please remove it from the flat first",
+                )
 
     def add_user_to_flat(self, user_id: uuid.UUID, flat_id: uuid.UUID):
         with get_session() as session:
