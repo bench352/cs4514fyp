@@ -1,2 +1,5 @@
+# Kubernetes configuration context to use
 config_context = "microk8s"
+
+# The external IP address of the machine running the system
 external_ip    = "1.2.3.4"
