@@ -10,34 +10,31 @@ This deployment method assumes you have a basic understanding of Docker, althoug
 - [curl](https://curl.se/): Used for downloading the necessary configuration files when you follow the deployment steps
   below. If you don't use curl, you can download all the files in this directory to your computer instead.
 
-## Download the Necessary Configurations
+## Download the Necessary Configurations & Spin Up the System
 
-You can download the Docker Compose file using the following commands to start the Smart Home Management System. Due to the design of [Eclipse Mosquitto](https://hub.docker.com/_/eclipse-mosquitto/), the configuration for the MQTT broker
-has to be downloaded separately and stored in the `mqtt-config` folder.
+You can download the Docker Compose file and the relevant configurations and start the Smart Home Management System using the following commands (Copy and paste them to your Bash terminal):
 
 ```bash
 curl -O https://raw.githubusercontent.com/bench352/cs4514fyp/main/deployment/docker-compose/docker-compose.yaml
 mkdir mqtt-config && cd mqtt-config
 curl -O https://raw.githubusercontent.com/bench352/cs4514fyp/main/deployment/docker-compose/mqtt-config/mosquitto.conf
 curl -O https://raw.githubusercontent.com/bench352/cs4514fyp/main/deployment/docker-compose/mqtt-config/passwordfile
-```
-
-## Spin Up Using Docker Compose
-
-Change directory (`cd`) back to where you download the `docker-compose.yaml`. Run the following command to start the system on one go:
-
-```bash
+cd ..
 docker-compose up -d
+sleep 10
+docker-compose restart
 ```
 
-This command will automatically start all components required to run the Smart Home Management System. Once the deployment is completed, you can access your freshly deployed instance on http://localhost:3000. Here are the login credentials of the instance:
+> Note that the above command also restarts all the components 10 seconds after deployment, just in case some components are not started correctly due to their dependencies not having completed initialization yet)
+
+All components required to run the Smart Home Management System will be automatically started. Once the deployment is completed, you can access your freshly deployed instance on http://localhost:3000. Here are the login credentials of the instance:
 
 - Username: `admin`
 - Password: `password`
 
 This deployment comes with demo data. You can learn more about the demo data [here](../../extra-info/DEMO-DATA.md).
 
-In case some components are not started properly and some data cannot be viewed in the Web UI, you can attempt to resolve it by running the following command on the directory that contains the `docker-compose.yaml` file:
+In case some components are not running properly and some data cannot be viewed in the Web UI, you can attempt to resolve it by running the following command on the directory that contains the `docker-compose.yaml` file:
 
 ```bash
 docker-compose restart
@@ -50,15 +47,15 @@ docker-compose restart
 > ```yaml
 > ...
 > web-ui:
-> image: bench352/cs4514-shms-web-ui:latest
->  ports:
->         - 3000:3000
->       environment:
->          - REACT_APP_EMA_SERVICE_URL=http://<public-ip-of-your-computer>:8000
->          - REACT_APP_DEVICE_DATA_SERVICE_URL=http://<public-ip-of-your-computer>:8001
->       - REACT_APP_DEVICE_DATA_SERVICE_WS_URL=ws://<public-ip-of-your-computer>:8001
->       - REACT_APP_DEVICE_HEALTH_SERVICE_URL=http://<public-ip-of-your-computer>:8002
->       - REACT_APP_DEVICE_HEALTH_SERVICE_WS_URL=ws://<public-ip-of-your-computer>:8002
+>   image: bench352/cs4514-shms-web-ui:latest
+>   ports:
+>     - 3000:3000
+>   environment:
+>     - REACT_APP_EMA_SERVICE_URL=http://<public-ip-of-your-computer>:8000
+>     - REACT_APP_DEVICE_DATA_SERVICE_URL=http://<public-ip-of-your-computer>:8001
+>     - REACT_APP_DEVICE_DATA_SERVICE_WS_URL=ws://<public-ip-of-your-computer>:8001
+>     - REACT_APP_DEVICE_HEALTH_SERVICE_URL=http://<public-ip-of-your-computer>:8002
+>     - REACT_APP_DEVICE_HEALTH_SERVICE_WS_URL=ws://<public-ip-of-your-computer>:8002
 > ...
 > ```
 
