@@ -1,16 +1,23 @@
+# Kubernetes configuration context to use
 config_context       = "microk8s"
+
+# Credentials for the various services
 mqtt_username        = "admin"
 mqtt_password        = "mqtt_password"
 timescaledb_password = "tsdb_password"
 kafka_username       = "admin"
 kafka_password       = "kafka_password"
 
-master_admin_username = "admin"
-master_admin_password = "password"
-
+# Secret keys for authentication purposes
 jwt_secret = "totally-secure-jwt-secret"
 api_key    = "totally-secure-api-key"
 
-external_ip = "172.27.54.240"
+# The first user to be created in the system (with Landlord role)
+master_admin_username = "admin"
+master_admin_password = "password"
 
+# The external IP of the machine running the system
+external_ip = "1.2.3.4"
+
+# Whether to preload the system with demo data and simulated devices
 enable_demo = true
